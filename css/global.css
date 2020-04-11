@@ -1,0 +1,21 @@
+*{
+    -fx-font-family: Joystix;
+    -fx-fill: white;
+}
+#wall{
+    -fx-background-color: blue;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+#point{
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+#power{
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
