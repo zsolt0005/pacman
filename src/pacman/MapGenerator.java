@@ -1,5 +1,6 @@
 package pacman;
 
+import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -37,14 +38,14 @@ public class MapGenerator {
                 "xxxxxxpxxxxx xx xxxxxpxxxxxx",
                 "     xpxxxxx xx xxxxxpx     ",
                 "     xpxx          xxpx     ",
-                "     xpxx xxx  xxx xxpx     ",
+                "     xpxx xxxggxxx xxpx     ",
                 "xxxxxxpxx x      x xxpxxxxxx",
                 "ppppppp   x      x   ppppppp",
                 "xxxxxxpxx x      x xxpxxxxxx",
                 "     xpxx xxxxxxxx xxpx     ",
                 "     xpxx          xxpx     ",
-                "     xpxx  xxxxxx  xxpx     ",
-                "xxxxxxpxx  xxxxxx  xxpxxxxxx",
+                "     xpxx xxxxxxxx xxpx     ",
+                "xxxxxxpxx xxxxxxxx xxpxxxxxx",
                 "xpppppppppppuxxppppppppppppx",
                 "xpxxxxpxxxxxpxxpxxxxxpxxxxpx",
                 "xpxxxxpxxxxxpxxpxxxxxpxxxxpx",
@@ -61,9 +62,9 @@ public class MapGenerator {
             // Apply map elements based on the blueprint
         for(int y = 0; y < mapY.length; y++){
             for(int x = 0; x < mapY[y].length(); x++){
+                Button b = new Button();
                     // Place wall
                 if(mapY[y].charAt(x) == 'x'){
-                    Button b = new Button();
                     b.setPrefWidth(Settings.tileSize);
                     b.setPrefHeight(Settings.tileSize);
                     b.setLayoutX(x * Settings.tileSize);
@@ -72,36 +73,55 @@ public class MapGenerator {
                     b.setId("wall");
                     mapElements.add(b);
                 }
+                    // Place enemy walkable wall
+                if(mapY[y].charAt(x) == 'g'){
+                    b.setPrefWidth(Settings.tileSize);
+                    b.setPrefHeight(Settings.tileSize);
+                    b.setLayoutX(x * Settings.tileSize);
+                    b.setLayoutY(y * Settings.tileSize);
+                    b.setFocusTraversable(false);
+                    b.setId("enemyWall");
+                    mapElements.add(b);
+                }
                     // Place point
                 if(mapY[y].charAt(x) == 'p'){
-                    Button p = new Button();
                     ImageView iv_cache = new ImageView(point);
                     iv_cache.setFitWidth(Settings.tileSize / 4);
                     iv_cache.setFitHeight(Settings.tileSize / 4);
-                    p.setGraphic(iv_cache);
-                    p.setPrefWidth(Settings.tileSize);
-                    p.setPrefHeight(Settings.tileSize);
-                    p.setLayoutX(x * Settings.tileSize);
-                    p.setLayoutY(y * Settings.tileSize);
-                    p.setFocusTraversable(false);
-                    p.setId("point");
-                    mapElements.add(p);
+                    b.setGraphic(iv_cache);
+                    b.setPrefWidth(Settings.tileSize);
+                    b.setPrefHeight(Settings.tileSize);
+                    b.setLayoutX(x * Settings.tileSize);
+                    b.setLayoutY(y * Settings.tileSize);
+                    b.setFocusTraversable(false);
+                    b.setId("point");
+                    mapElements.add(b);
                 }
                     // Place powerUp
                 if(mapY[y].charAt(x) == 'u'){
-                    Button u = new Button();
                     ImageView iv_cache = new ImageView(power);
                     iv_cache.setFitWidth(Settings.tileSize / 2);
                     iv_cache.setFitHeight(Settings.tileSize / 2);
-                    u.setGraphic(iv_cache);
-                    u.setPrefWidth(Settings.tileSize);
-                    u.setPrefHeight(Settings.tileSize);
-                    u.setLayoutX(x * Settings.tileSize);
-                    u.setLayoutY(y * Settings.tileSize);
-                    u.setFocusTraversable(false);
-                    u.setId("power");
-                    mapElements.add(u);
+                    b.setGraphic(iv_cache);
+                    b.setPrefWidth(Settings.tileSize);
+                    b.setPrefHeight(Settings.tileSize);
+                    b.setLayoutX(x * Settings.tileSize);
+                    b.setLayoutY(y * Settings.tileSize);
+                    b.setFocusTraversable(false);
+                    b.setId("power");
+                    mapElements.add(b);
                 }
+
+                // For developer build
+                if(Settings.devBuild){
+                    b.setOnMouseMoved(e->{
+                        Settings.hoverPoint = new Point2D(
+                                (int)( (e.getSceneX() - Settings.groupGame.getLayoutX()) / Settings.tileSize),
+                                (int)( (e.getSceneY() - Settings.groupGame.getLayoutY()) / Settings.tileSize)
+                        );
+                    });
+                }
+
             }
         }
 

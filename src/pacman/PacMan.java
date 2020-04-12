@@ -111,9 +111,17 @@ public class PacMan extends Canvas {
 
         // </editor-fold>
 
-        // TODO: check side teleport
-    }
+        // <editor-fold desc="Teleport">
 
+        if(getLayoutX() < 0 - getWidth()){
+            setLayoutX(Settings.gameWidth);
+        }
+        if(getLayoutX() > Settings.gameWidth){
+            setLayoutX(0 - getWidth());
+        }
+
+        // </editor-fold>
+    }
     boolean collisionDetection(){
         boolean returnData = true;
         double x = 0;
@@ -148,7 +156,7 @@ public class PacMan extends Canvas {
 
             // Check collision for movement
             if(MapGenerator.mapElements.get(i).getBoundsInParent().intersects(getLayoutX() + x,getLayoutY() + y,getWidth(),getHeight())){
-                if(MapGenerator.mapElements.get(i).getId().equals("wall"))
+                if(MapGenerator.mapElements.get(i).getId().equals("wall") || MapGenerator.mapElements.get(i).getId().equals("enemyWall"))
                     returnData = false;
             }
         }
@@ -176,7 +184,7 @@ public class PacMan extends Canvas {
                 int find = 0;
                 for(int i = 0; i < MapGenerator.mapElements.size(); i++){
                     if(MapGenerator.mapElements.get(i).getBoundsInParent().intersects(getLayoutX() + x,getLayoutY() + y,getWidth(),getHeight())){
-                        if(MapGenerator.mapElements.get(i).getId().equals("wall"))
+                        if(MapGenerator.mapElements.get(i).getId().equals("wall") || MapGenerator.mapElements.get(i).getId().equals("enemyWall"))
                             find++;
                     }
                 }
@@ -189,7 +197,6 @@ public class PacMan extends Canvas {
 
         return returnData;
     }
-
     void animation(){
         if(!isMoving)
             return;
@@ -206,12 +213,12 @@ public class PacMan extends Canvas {
                 Settings.pacman = null;
                 t.stop();
                 t2.stop();
+                GuiHandler.endGame();
             }
             else
                 animationFrame++;
         }
     }
-
     void draw(){
         gc.clearRect(0,0, getWidth(), getHeight()); // Clear canvas
         gc.drawImage(pacmans[animationFrame], 0, 0, getWidth(), getHeight()); // Draw PacMan

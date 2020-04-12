@@ -7,15 +7,28 @@
     -fx-border-width: 0;
     -fx-padding: 0;
 }
-
+#enemyWall{
+    -fx-background-color: rgba(0, 255, 247, 0.2);
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
 #point{
     -fx-background-color: transparent;
     -fx-border-width: 0;
     -fx-padding: 0;
 }
-
 #power{
     -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+#devB{
+     -fx-background-color: rgba(255, 255, 255, 0.8);
+     -fx-border-width: 0;
+     -fx-padding: 0;
+}
+#targetB{
+    -fx-background-color: rgba(255, 0, 0, 0.5);
     -fx-border-width: 0;
     -fx-padding: 0;
 }

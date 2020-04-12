@@ -21,7 +21,10 @@ public class Setup {
         Settings.stage.setTitle(Settings.title); // Set title
         Settings.stage.setResizable(Settings.canResize); // Set resizable property
         Settings.stage.setScene(Settings.scene); // Set scene
-        Settings.scene.setCursor(Settings.hideCursor ? Cursor.NONE : Cursor.DEFAULT); // Set cursor
+            // Set cursor
+        Settings.scene.setCursor(
+                Settings.devBuild ? Cursor.DEFAULT : (Settings.hideCursor ? Cursor.NONE : Cursor.DEFAULT)
+        );
             // Icon
         Settings.stage.getIcons().add(new Image("file:img/icons/pacman.png"));
             // Show stage
@@ -50,17 +53,43 @@ public class Setup {
         MapGenerator.start(); // Launch map generator
         GuiHandler.start(); // Launch UI handler
 
-        // Set key detection
+            // Set key detection
         Settings.scene.setOnKeyPressed(e->keyDetection(e));
 
         // TODO: enemy
 
             // Add to root group all sub elements
         Settings.group.getChildren().addAll(Settings.groupGame, Settings.groupUi);
+
+        // <editor-fold desc="Developer build">
+
+        if(Settings.devBuild)
+            new Developer(); // Calls for developer build
+
+        // </editor-fold>
     }
 
     static void restart(){
-        // TODO: Restart game
+        SaveHandler.save();
+        Settings.time = 0;
+        Settings.hiScore = SaveHandler.load();
+        Settings.score = 0;
+        Settings.isPaused = false;
+        Settings.isGameOver = false;
+        if(Settings.pacman != null){
+            Settings.pacman.t.stop();
+            Settings.pacman.t2.stop();
+            Settings.groupGame.getChildren().remove(Settings.pacman);
+            Settings.pacman = null;
+        }
+        Settings.health = 3;
+
+        MapGenerator.start();
+        Settings.groupGame.getChildren().remove(GuiHandler.status);
+        Settings.groupGame.getChildren().add(GuiHandler.status);
+
+        Settings.pacman = new PacMan();
+        Settings.groupGame.getChildren().add(Settings.pacman);
     }
 
     static void keyDetection(KeyEvent e){

@@ -46,6 +46,7 @@ public class GuiHandler{
     }
 
     public static void endGame(){
+        Settings.isPaused = true;
         Settings.isGameOver = true;
     }
 
@@ -72,18 +73,18 @@ public class GuiHandler{
             // Status label handler
         if(!Settings.isStarted){
             status.setText("Press ENTER to start");
-            status.setLayoutX( (Settings.gameWidth / 3.2) - status.getScaleX() );
-            status.setLayoutY( (Settings.gameHeight / 2.15) - (status.getHeight() / 2) );
+            status.setLayoutX( (Settings.gameWidth / 2.0) - (status.getBoundsInParent().getWidth() / 2) );
+            status.setLayoutY( (Settings.gameHeight / 2.15) - (status.getBoundsInParent().getHeight() / 2) );
         }
-        else if(Settings.isPaused){
+        else if(Settings.isPaused && !Settings.isGameOver){
             status.setText("Paused!");
-            status.setLayoutX( (Settings.gameWidth / 2.35) - status.getScaleX() );
-            status.setLayoutY( (Settings.gameHeight / 2.15) - (status.getHeight() / 2) );
+            status.setLayoutX( (Settings.gameWidth / 2.0) - (status.getBoundsInParent().getWidth() / 2) );
+            status.setLayoutY( (Settings.gameHeight / 2.15) - (status.getBoundsInParent().getHeight() / 2) );
         }
         else if(Settings.isGameOver){
             status.setText("Press ENTER to restart");
-            status.setLayoutX( (Settings.gameWidth / 3.2) - status.getScaleX() );
-            status.setLayoutY( (Settings.gameHeight / 2.15) - (status.getHeight() / 2) );
+            status.setLayoutX( (Settings.gameWidth / 2.0) - (status.getBoundsInParent().getWidth() / 2) );
+            status.setLayoutY( (Settings.gameHeight / 2.15) - (status.getBoundsInParent().getHeight() / 2) );
         }
         else
             status.setText("");
