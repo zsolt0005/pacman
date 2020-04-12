@@ -56,7 +56,7 @@ public class Setup {
             // Set key detection
         Settings.scene.setOnKeyPressed(e->keyDetection(e));
 
-        // TODO: enemy
+        new Ghost();
 
             // Add to root group all sub elements
         Settings.group.getChildren().addAll(Settings.groupGame, Settings.groupUi);

@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/global.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/global.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PacMan/pacman/GuiHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PacMan/pacman/GuiHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PacMan/pacman/PacMan.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PacMan/pacman/PacMan.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PacMan/pacman/Setup.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PacMan/pacman/Setup.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/saves/high.txt" beforeDir="false" afterPath="$PROJECT_DIR$/saves/high.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pacman/GuiHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pacman/GuiHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pacman/MapGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pacman/MapGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pacman/PacMan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pacman/PacMan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pacman/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pacman/Settings.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pacman/Setup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pacman/Setup.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -205,7 +195,7 @@
       <workItem from="1586418934280" duration="42843000" />
       <workItem from="1586590109673" duration="22766000" />
       <workItem from="1586634301706" duration="1561000" />
-      <workItem from="1586680892656" duration="7217000" />
+      <workItem from="1586680892656" duration="9268000" />
     </task>
     <servers />
   </component>
@@ -229,26 +219,26 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="502" y="204" key="FileChooserDialogImpl/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1585997393340" />
-    <state width="1869" height="269" key="GridCell.Tab.0.bottom" timestamp="1586689058418">
+    <state width="1869" height="269" key="GridCell.Tab.0.bottom" timestamp="1586693270607">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1869" height="269" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1360.156.1360.728@0.0.1920.1040" timestamp="1586635846664" />
-    <state width="1869" height="269" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1586689058418" />
-    <state width="1869" height="269" key="GridCell.Tab.0.center" timestamp="1586689058418">
+    <state width="1869" height="269" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1586693270607" />
+    <state width="1869" height="269" key="GridCell.Tab.0.center" timestamp="1586693270607">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1869" height="269" key="GridCell.Tab.0.center/0.0.1920.1040/-1360.156.1360.728@0.0.1920.1040" timestamp="1586635846664" />
-    <state width="1869" height="269" key="GridCell.Tab.0.center/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1586689058418" />
-    <state width="1869" height="269" key="GridCell.Tab.0.left" timestamp="1586689058418">
+    <state width="1869" height="269" key="GridCell.Tab.0.center/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1586693270607" />
+    <state width="1869" height="269" key="GridCell.Tab.0.left" timestamp="1586693270607">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1869" height="269" key="GridCell.Tab.0.left/0.0.1920.1040/-1360.156.1360.728@0.0.1920.1040" timestamp="1586635846664" />
-    <state width="1869" height="269" key="GridCell.Tab.0.left/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1586689058418" />
-    <state width="1869" height="269" key="GridCell.Tab.0.right" timestamp="1586689058418">
+    <state width="1869" height="269" key="GridCell.Tab.0.left/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1586693270607" />
+    <state width="1869" height="269" key="GridCell.Tab.0.right" timestamp="1586693270607">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1869" height="269" key="GridCell.Tab.0.right/0.0.1920.1040/-1360.156.1360.728@0.0.1920.1040" timestamp="1586635846664" />
-    <state width="1869" height="269" key="GridCell.Tab.0.right/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1586689058418" />
+    <state width="1869" height="269" key="GridCell.Tab.0.right/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1586693270607" />
     <state width="1869" height="335" key="GridCell.Tab.1.bottom" timestamp="1586635580341">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
