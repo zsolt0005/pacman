@@ -3,9 +3,12 @@ package pacman;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Settings {
 
@@ -17,6 +20,8 @@ public class Settings {
     public static boolean isGameOver = false; // Game over (Win/Lose)
     public static boolean isStarted = false; // First launch
     public static PacMan pacman = null; // PacMan cahracter
+    public static int ghostCount = 1; // Ghosts count
+    public static Ghost[] ghosts = new Ghost[ghostCount]; // PacMan cahracter
     public static int health = 3; // Health
 
     // Game
@@ -63,4 +68,48 @@ public class Settings {
     public static boolean canTarget = false; // Can be target targeted ?
     public static Point2D hoverPoint = new Point2D(0.0,0.0); // Developer target point
 
+    // CACHE
+    public static Image[] pacmans = {
+            new Image("file:img/PacMan/1.png"),
+            new Image("file:img/PacMan/2.png"),
+            new Image("file:img/PacMan/3.png"),
+            new Image("file:img/PacMan/4.png"),
+            new Image("file:img/PacMan/5.png"),
+            new Image("file:img/PacMan/6.png"),
+            new Image("file:img/PacMan/7.png")
+    };
+    public static List<Image[]> ghostsImg = new ArrayList<>();
+
+    public static void load(){
+        ghostsImg.add(new Image[]{
+                new Image("file:img/Ghost/Alive/ghost-blue-01.png"),
+                new Image("file:img/Ghost/Alive/ghost-blue-02.png"),
+                new Image("file:img/Ghost/Alive/ghost-blue-03.png"),
+                new Image("file:img/Ghost/Alive/ghost-blue-04.png")
+        });
+        ghostsImg.add(new Image[]{
+                new Image("file:img/Ghost/Alive/ghost-green-01.png"),
+                new Image("file:img/Ghost/Alive/ghost-green-02.png"),
+                new Image("file:img/Ghost/Alive/ghost-green-03.png"),
+                new Image("file:img/Ghost/Alive/ghost-green-04.png")
+        });
+        ghostsImg.add(new Image[]{
+                new Image("file:img/Ghost/Alive/ghost-pink-01.png"),
+                new Image("file:img/Ghost/Alive/ghost-pink-02.png"),
+                new Image("file:img/Ghost/Alive/ghost-pink-03.png"),
+                new Image("file:img/Ghost/Alive/ghost-pink-04.png")
+        });
+        ghostsImg.add(new Image[]{
+                new Image("file:img/Ghost/Alive/ghost-yellow-01.png"),
+                new Image("file:img/Ghost/Alive/ghost-yellow-02.png"),
+                new Image("file:img/Ghost/Alive/ghost-yellow-03.png"),
+                new Image("file:img/Ghost/Alive/ghost-yellow-04.png")
+        });
+        ghostsImg.add(new Image[]{
+                new Image("file:img/Ghost/Dead/ghost-dead-01.png"),
+                new Image("file:img/Ghost/Dead/ghost-dead-02.png"),
+                new Image("file:img/Ghost/Dead/ghost-dead-03.png"),
+                new Image("file:img/Ghost/Dead/ghost-dead-04.png")
+        });
+    }
 }

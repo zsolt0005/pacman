@@ -5,11 +5,8 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MapGenerator {
-    static List<Button> mapElements = new ArrayList<>();
+    static Button[][] mapElements;
 
     public static void  start(){
         // Generates the map and all map elements
@@ -19,7 +16,6 @@ public class MapGenerator {
     static void generateMap(){
             // Clear map
         Settings.groupGame.getChildren().removeAll();
-        mapElements.clear();
             // Cache images
         Image point = new Image("file:img/onMap/point.png");
         Image power = new Image("file:img/onMap/powerUp.png");
@@ -59,6 +55,8 @@ public class MapGenerator {
                 "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         };
 
+        mapElements = new Button[mapY.length][mapY[0].length()];
+
             // Apply map elements based on the blueprint
         for(int y = 0; y < mapY.length; y++){
             for(int x = 0; x < mapY[y].length(); x++){
@@ -71,7 +69,8 @@ public class MapGenerator {
                     b.setLayoutY(y * Settings.tileSize);
                     b.setFocusTraversable(false);
                     b.setId("wall");
-                    mapElements.add(b);
+                    mapElements[y][x] = b;
+                    Settings.groupGame.getChildren().add(b);
                 }
                     // Place enemy walkable wall
                 if(mapY[y].charAt(x) == 'g'){
@@ -81,7 +80,8 @@ public class MapGenerator {
                     b.setLayoutY(y * Settings.tileSize);
                     b.setFocusTraversable(false);
                     b.setId("enemyWall");
-                    mapElements.add(b);
+                    mapElements[y][x] = b;
+                    Settings.groupGame.getChildren().add(b);
                 }
                     // Place point
                 if(mapY[y].charAt(x) == 'p'){
@@ -95,7 +95,8 @@ public class MapGenerator {
                     b.setLayoutY(y * Settings.tileSize);
                     b.setFocusTraversable(false);
                     b.setId("point");
-                    mapElements.add(b);
+                    mapElements[y][x] = b;
+                    Settings.groupGame.getChildren().add(b);
                 }
                     // Place powerUp
                 if(mapY[y].charAt(x) == 'u'){
@@ -109,7 +110,20 @@ public class MapGenerator {
                     b.setLayoutY(y * Settings.tileSize);
                     b.setFocusTraversable(false);
                     b.setId("power");
-                    mapElements.add(b);
+                    mapElements[y][x] = b;
+                    Settings.groupGame.getChildren().add(b);
+                }
+
+                // Place enemy walkable wall
+                if(mapY[y].charAt(x) == ' '){
+                    b.setPrefWidth(Settings.tileSize);
+                    b.setPrefHeight(Settings.tileSize);
+                    b.setLayoutX(x * Settings.tileSize);
+                    b.setLayoutY(y * Settings.tileSize);
+                    b.setFocusTraversable(false);
+                    b.setId("empty");
+                    mapElements[y][x] = b;
+                    Settings.groupGame.getChildren().add(b);
                 }
 
                 // For developer build
@@ -124,9 +138,18 @@ public class MapGenerator {
 
             }
         }
-
-            // Add buttons to view
-        Settings.groupGame.getChildren().addAll(mapElements);
     }
 
+    static Button generateMapElement(int x, int y, String id){
+
+        Button b = new Button();
+        b.setPrefWidth(Settings.tileSize);
+        b.setPrefHeight(Settings.tileSize);
+        b.setLayoutX(x * Settings.tileSize);
+        b.setLayoutY(y * Settings.tileSize);
+        b.setFocusTraversable(false);
+        b.setId(id);
+
+        return b;
+    }
 }

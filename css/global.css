@@ -12,6 +12,11 @@
     -fx-border-width: 0;
     -fx-padding: 0;
 }
+#empty{
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
 #point{
     -fx-background-color: transparent;
     -fx-border-width: 0;

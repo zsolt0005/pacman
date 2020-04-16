@@ -39,9 +39,6 @@ public class Developer {
 
         Settings.groupGame.getChildren().add(devSqr);
 
-        // TODO: On Click check collision,
-        // TODO: if not wall, place developer targetPoint
-
         t = new Timeline(new KeyFrame(Duration.millis(1), e->{
             handleMouse();
         }));
@@ -51,20 +48,17 @@ public class Developer {
 
     void handleMouse() {
 
+        if(Settings.hoverPoint.getY() > Settings.yTileCount - 1)
+            return;
+        if(Settings.hoverPoint.getX() > Settings.xTileCount - 1)
+            return;
+
         devSqr.setLayoutX(Settings.hoverPoint.getX() * Settings.tileSize);
         devSqr.setLayoutY(Settings.hoverPoint.getY() * Settings.tileSize);
 
         int find = 0;
-
-        for (int i = 0; i < MapGenerator.mapElements.size(); i++) {
-            if (MapGenerator.mapElements.get(i).getBoundsInParent().intersects(
-                    Settings.hoverPoint.getX() * Settings.tileSize + Settings.tileSize / 2, Settings.hoverPoint.getY() * Settings.tileSize + Settings.tileSize / 2,
-                    1, 1
-            )) {
-                if (MapGenerator.mapElements.get(i).getId().equals("wall"))
-                    find++;
-            }
-        }
+        if (MapGenerator.mapElements[(int)Settings.hoverPoint.getY()][(int)Settings.hoverPoint.getX()].getId().equals("wall"))
+            find++;
 
         if (find == 0)
             Settings.canTarget = true;

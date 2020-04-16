@@ -91,19 +91,23 @@ public class GuiHandler{
 
         // Health indicator
         if(healthHolder.getChildren().size() > Settings.health)
-            healthHolder.getChildren().remove(healthHolder.getChildren().get(healthHolder.getChildren().size()));
+            healthHolder.getChildren().remove(healthHolder.getChildren().get(healthHolder.getChildren().size() - 1));
 
         // EndGame handler
         if(Settings.health <= 0)
             endGame();
         if(Settings.score >= 2670){
+
             int pointsLeft = 0;
-            for(int i = 0; i < MapGenerator.mapElements.size(); i++){
-                if(MapGenerator.mapElements.get(i).getId() == "point" || MapGenerator.mapElements.get(i).getId() == "power")
-                    pointsLeft++;
+            for(int y = 0; y < MapGenerator.mapElements.length; y++) {
+                for (int x = 0; x < MapGenerator.mapElements[y].length; x++) {
+                    if (MapGenerator.mapElements[y][x].getId() == "point" || MapGenerator.mapElements[y][x].getId() == "power")
+                        pointsLeft++;
+                }
             }
             if(pointsLeft == 0)
                 endGame();
+
         }
     }
 
@@ -135,10 +139,15 @@ public class GuiHandler{
         healthHolder.setLayoutY(Settings.gameHeight * 0.9);
 
         for(int i = 0; i < Settings.health; i++){
-            ImageView iv = new ImageView(pac);
-            iv.setPreserveRatio(true);
-            iv.setFitWidth(Settings.uiWidth * 0.05);
-            healthHolder.getChildren().set(i, iv);
+            if(healthHolder.getChildren().size() < Settings.health){
+                healthHolder.getChildren().add(new ImageView(pac));
+                i = 0;
+            }else{
+                ImageView iv = new ImageView(pac);
+                iv.setPreserveRatio(true);
+                iv.setFitWidth(Settings.uiWidth * 0.05);
+                healthHolder.getChildren().set(i, iv);
+            }
         }
 
     }

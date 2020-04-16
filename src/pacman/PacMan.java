@@ -22,19 +22,12 @@ public class PacMan extends Canvas {
 
     // For animation
     int animationFrame = 0;
-    Image[] pacmans = {
-            new Image("file:img/PacMan/1.png"),
-            new Image("file:img/PacMan/2.png"),
-            new Image("file:img/PacMan/3.png"),
-            new Image("file:img/PacMan/4.png"),
-            new Image("file:img/PacMan/5.png"),
-            new Image("file:img/PacMan/6.png"),
-            new Image("file:img/PacMan/7.png")
-    };
+    Image[] pacmans = Settings.pacmans;
 
     public PacMan(){
         super(Settings.tileSize * 0.7, Settings.tileSize * 0.7);
         gc = getGraphicsContext2D();
+        setId("PacMan");
 
         setLayoutX( (14 * Settings.tileSize) + ( (Settings.tileSize - getWidth() ) / 2) );
         setLayoutY( (23 * Settings.tileSize) + ( (Settings.tileSize - getHeight() ) / 2) );
@@ -45,8 +38,12 @@ public class PacMan extends Canvas {
             if(Settings.isPaused)
                 return;
 
-            movement();
             draw();
+
+            if(isDead)
+                return;
+
+            movement();
         }));
         t.setCycleCount(Animation.INDEFINITE);
         t.play();
@@ -62,6 +59,24 @@ public class PacMan extends Canvas {
 
         // </editor-fold>
 
+    }
+
+    public void die(){
+        Settings.groupGame.getChildren().remove(this);
+        Settings.pacman = null;
+        t.stop();
+        t2.stop();
+        Settings.health--;
+        for(int i = 0; i < Settings.ghostCount; i++){
+            Settings.ghosts[i].t.stop();
+            Settings.ghosts[i].t2.stop();
+            Settings.groupGame.getChildren().remove(Settings.ghosts[i]);
+            Settings.ghosts[i] = null;
+        }
+        if(Settings.health <= 0)
+            GuiHandler.endGame();
+        else
+            Setup.respawn();
     }
 
     void movement(){
@@ -122,42 +137,49 @@ public class PacMan extends Canvas {
 
         // </editor-fold>
     }
+
     boolean collisionDetection(){
         boolean returnData = true;
         double x = 0;
         double y = 0;
+        int myX = (int)(getLayoutX() / Settings.tileSize);
+        int myY = (int)(getLayoutY() / Settings.tileSize);
 
         // <editor-fold desc="Collision and pickup">
 
-        for(int i = 0; i < MapGenerator.mapElements.size(); i++){
-            // Predicted movement
-            if(direction == 0)
-                y = -((Settings.tileSize - getHeight()) / 2);
-            if(direction == 2)
-                y = ((Settings.tileSize - getHeight()) / 2);
-            if(direction == 1)
-                x = ((Settings.tileSize - getWidth()) / 2);
-            if(direction == 3)
-                x = -((Settings.tileSize - getWidth()) / 2);
+        // Predicted movement
+        if(direction == 0)
+            y = -((Settings.tileSize - getHeight()) / 2);
+        if(direction == 2)
+            y = ((Settings.tileSize - getHeight()) / 2);
+        if(direction == 1)
+            x = ((Settings.tileSize - getWidth()) / 2);
+        if(direction == 3)
+            x = -((Settings.tileSize - getWidth()) / 2);
 
-            // Check collision for pickup
-            if(MapGenerator.mapElements.get(i).getBoundsInParent().intersects(getLayoutX(),getLayoutY(),getWidth(),getHeight())){
-                if(MapGenerator.mapElements.get(i).getId().equals("point")){
-                    Settings.score += Settings.pintForPoint; // Add points
-                    Settings.groupGame.getChildren().remove(MapGenerator.mapElements.get(i)); // Remove from view
-                    MapGenerator.mapElements.remove(i); // Remove from list
-                }else if(MapGenerator.mapElements.get(i).getId().equals("power")){
-                    Settings.score += Settings.pintForPower;// Add points
-                    Settings.powerUpTimeLeft = Settings.powerUpTime; // Set PowerUp
-                    Settings.groupGame.getChildren().remove(MapGenerator.mapElements.get(i)); // Remove from view
-                    MapGenerator.mapElements.remove(i); // Remove from list
-                }
+        // Check collision for pickup
+        if(MapGenerator.mapElements[myY][myX].getBoundsInParent().intersects(getLayoutX(),getLayoutY(),getWidth(),getHeight())){
+            if(MapGenerator.mapElements[myY][myX].getId().equals("point")){
+                Settings.score += Settings.pintForPoint; // Add points
+                Settings.groupGame.getChildren().remove(MapGenerator.mapElements[myY][myX]); // Remove from view
+                MapGenerator.mapElements[myY][myX] = MapGenerator.generateMapElement(myX, myY, "empty"); // Replace
+            }else if(MapGenerator.mapElements[myY][myX].getId().equals("power")){
+                Settings.score += Settings.pintForPower;// Add points
+                Settings.powerUpTimeLeft = Settings.powerUpTime; // Set PowerUp
+                Settings.groupGame.getChildren().remove(MapGenerator.mapElements[myY][myX]); // Remove from view
+                MapGenerator.mapElements[myY][myX] = MapGenerator.generateMapElement(myX, myY, "empty"); // Replace
             }
+        }
 
-            // Check collision for movement
-            if(MapGenerator.mapElements.get(i).getBoundsInParent().intersects(getLayoutX() + x,getLayoutY() + y,getWidth(),getHeight())){
-                if(MapGenerator.mapElements.get(i).getId().equals("wall") || MapGenerator.mapElements.get(i).getId().equals("enemyWall"))
-                    returnData = false;
+        // Sorry for _ variables
+        for(int _y = myY - 1; _y <= myY + 1; _y++){
+            for(int _x = myX - 1; _x <= myX + 1; _x++){
+
+                // Check collision for movement
+                if(MapGenerator.mapElements[_y][_x].getBoundsInParent().intersects(getLayoutX() + x,getLayoutY() + y,getWidth(),getHeight()))
+                    if(MapGenerator.mapElements[_y][_x].getId().equals("wall") || MapGenerator.mapElements[_y][_x].getId().equals("enemyWall"))
+                        returnData = false;
+
             }
         }
 
@@ -182,10 +204,12 @@ public class PacMan extends Canvas {
                     x = -((Settings.tileSize - getWidth()) / 2);
 
                 int find = 0;
-                for(int i = 0; i < MapGenerator.mapElements.size(); i++){
-                    if(MapGenerator.mapElements.get(i).getBoundsInParent().intersects(getLayoutX() + x,getLayoutY() + y,getWidth(),getHeight())){
-                        if(MapGenerator.mapElements.get(i).getId().equals("wall") || MapGenerator.mapElements.get(i).getId().equals("enemyWall"))
-                            find++;
+
+                for(int _y = myY - 1; _y <= myY + 1; _y++) {
+                    for (int _x = myX - 1; _x <= myX + 1; _x++) {
+                        if(MapGenerator.mapElements[_y][_x].getBoundsInParent().intersects(getLayoutX() + x,getLayoutY() + y,getWidth(),getHeight()))
+                            if(MapGenerator.mapElements[_y][_x].getId().equals("wall") || MapGenerator.mapElements[_y][_x].getId().equals("enemyWall"))
+                                find++;
                     }
                 }
                 if(find == 0)
@@ -197,6 +221,7 @@ public class PacMan extends Canvas {
 
         return returnData;
     }
+
     void animation(){
         if(!isMoving)
             return;
@@ -209,19 +234,17 @@ public class PacMan extends Canvas {
         }else{
             if(animationFrame + 1 >= 7){
                     // Destroy PacMan
-                Settings.groupGame.getChildren().remove(this);
-                Settings.pacman = null;
-                t.stop();
-                t2.stop();
-                GuiHandler.endGame();
+                die();
             }
             else
                 animationFrame++;
         }
     }
+
     void draw(){
         gc.clearRect(0,0, getWidth(), getHeight()); // Clear canvas
         gc.drawImage(pacmans[animationFrame], 0, 0, getWidth(), getHeight()); // Draw PacMan
     }
 
+    // TODO: After restart PacMan doesnt eat points and powerUps
 }

@@ -15,6 +15,8 @@ public class Setup {
 
     public static void setup(){
 
+        Settings.load();
+
         // <editor-fold desc="Setup stage">
 
             // Base setup
@@ -51,12 +53,15 @@ public class Setup {
         // </editor-fold>
 
         MapGenerator.start(); // Launch map generator
+
+        // Spawn ghosts
+        for(int i = 0; i < Settings.ghostCount; i++)
+            Settings.ghosts[i] = new Ghost();
+
         GuiHandler.start(); // Launch UI handler
 
             // Set key detection
         Settings.scene.setOnKeyPressed(e->keyDetection(e));
-
-        new Ghost();
 
             // Add to root group all sub elements
         Settings.group.getChildren().addAll(Settings.groupGame, Settings.groupUi);
@@ -74,6 +79,7 @@ public class Setup {
         Settings.time = 0;
         Settings.hiScore = SaveHandler.load();
         Settings.score = 0;
+        Settings.isStarted = true;
         Settings.isPaused = false;
         Settings.isGameOver = false;
         if(Settings.pacman != null){
@@ -85,11 +91,19 @@ public class Setup {
         Settings.health = 3;
 
         MapGenerator.start();
+        for(int i = 0; i < Settings.ghostCount; i++)
+            Settings.ghosts[i] = new Ghost();
         Settings.groupGame.getChildren().remove(GuiHandler.status);
         Settings.groupGame.getChildren().add(GuiHandler.status);
 
         Settings.pacman = new PacMan();
         Settings.groupGame.getChildren().add(Settings.pacman);
+    }
+    static void respawn(){
+        Settings.pacman = new PacMan();
+        Settings.groupGame.getChildren().add(Settings.pacman);
+        for(int i = 0; i < Settings.ghostCount; i++)
+            Settings.ghosts[i] = new Ghost();
     }
 
     static void keyDetection(KeyEvent e){
