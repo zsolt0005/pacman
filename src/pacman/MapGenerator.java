@@ -4,6 +4,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import pacman.AStar.Walkable;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MapGenerator {
     static Button[][] mapElements;
@@ -31,15 +34,15 @@ public class MapGenerator {
                 "xpxxxxpxxpxxxxxxxxpxxpxxxxpx",
                 "xpxxxxpxxpxxxxxxxxpxxpxxxxpx",
                 "xppppppxxpppuxxppppxxpppppux",
-                "xxxxxxpxxxxx xx xxxxxpxxxxxx",
-                "     xpxxxxx xx xxxxxpx     ",
-                "     xpxx          xxpx     ",
-                "     xpxx xxxggxxx xxpx     ",
-                "xxxxxxpxx x      x xxpxxxxxx",
-                "ppppppp   x      x   ppppppp",
-                "xxxxxxpxx x      x xxpxxxxxx",
-                "     xpxx xxxxxxxx xxpx     ",
-                "     xpxx          xxpx     ",
+                "xxxxxxpxxxxxpxxpxxxxxpxxxxxx",
+                "     xpxxxxxpxxpxxxxxpx     ",
+                "     xpx             px     ",
+                "     xpx xxx xxx xxx xx     ",
+                "xxxxxxpx x x x x xp  pxxxxxx",
+                "pppppppp xxx xxx xpxxppppppp",
+                "xxxxxxpx xpp xpx xp  pxxxxxx",
+                "     xpx xpx xpx xxx xx     ",
+                "     xpx             px     ",
                 "     xpxx xxxxxxxx xxpx     ",
                 "xxxxxxpxx xxxxxxxx xxpxxxxxx",
                 "xpppppppppppuxxppppppppppppx",
@@ -69,17 +72,6 @@ public class MapGenerator {
                     b.setLayoutY(y * Settings.tileSize);
                     b.setFocusTraversable(false);
                     b.setId("wall");
-                    mapElements[y][x] = b;
-                    Settings.groupGame.getChildren().add(b);
-                }
-                    // Place enemy walkable wall
-                if(mapY[y].charAt(x) == 'g'){
-                    b.setPrefWidth(Settings.tileSize);
-                    b.setPrefHeight(Settings.tileSize);
-                    b.setLayoutX(x * Settings.tileSize);
-                    b.setLayoutY(y * Settings.tileSize);
-                    b.setFocusTraversable(false);
-                    b.setId("enemyWall");
                     mapElements[y][x] = b;
                     Settings.groupGame.getChildren().add(b);
                 }
@@ -116,6 +108,7 @@ public class MapGenerator {
 
                 // Place enemy walkable wall
                 if(mapY[y].charAt(x) == ' '){
+                    b = new Walkable();
                     b.setPrefWidth(Settings.tileSize);
                     b.setPrefHeight(Settings.tileSize);
                     b.setLayoutX(x * Settings.tileSize);
@@ -140,15 +133,15 @@ public class MapGenerator {
         }
     }
 
-    static Button generateMapElement(int x, int y, String id){
+    static Walkable generateMapElement(int x, int y){
 
-        Button b = new Button();
+        Walkable b = new Walkable();
         b.setPrefWidth(Settings.tileSize);
         b.setPrefHeight(Settings.tileSize);
         b.setLayoutX(x * Settings.tileSize);
         b.setLayoutY(y * Settings.tileSize);
         b.setFocusTraversable(false);
-        b.setId(id);
+        b.setId("empty");
 
         return b;
     }

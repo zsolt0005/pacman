@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.util.Duration;
+import pacman.AStar.Walkable;
 
 public class Developer {
 
@@ -60,15 +61,14 @@ public class Developer {
         if (MapGenerator.mapElements[(int)Settings.hoverPoint.getY()][(int)Settings.hoverPoint.getX()].getId().equals("wall"))
             find++;
 
-        if (find == 0)
+        if (find == 0){
             Settings.canTarget = true;
-        else
-            Settings.canTarget = false;
-
-        if (Settings.canTarget)
             devSqr.setId("targetB");
-        else
+        }
+        else {
+            Settings.canTarget = false;
             devSqr.setId("devB");
+        }
 
     }
 }

@@ -7,11 +7,6 @@
     -fx-border-width: 0;
     -fx-padding: 0;
 }
-#enemyWall{
-    -fx-background-color: rgba(0, 255, 247, 0.2);
-    -fx-border-width: 0;
-    -fx-padding: 0;
-}
 #empty{
     -fx-background-color: transparent;
     -fx-border-width: 0;

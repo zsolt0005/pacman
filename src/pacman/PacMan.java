@@ -129,10 +129,10 @@ public class PacMan extends Canvas {
         // <editor-fold desc="Teleport">
 
         if(getLayoutX() < 0 - getWidth()){
-            setLayoutX(Settings.gameWidth);
+            setLayoutX(Settings.gameWidth - Settings.tileSize);
         }
         if(getLayoutX() > Settings.gameWidth){
-            setLayoutX(0 - getWidth());
+            setLayoutX(0);
         }
 
         // </editor-fold>
@@ -157,23 +157,28 @@ public class PacMan extends Canvas {
         if(direction == 3)
             x = -((Settings.tileSize - getWidth()) / 2);
 
+        // TODO: After restart doesnt work
         // Check collision for pickup
         if(MapGenerator.mapElements[myY][myX].getBoundsInParent().intersects(getLayoutX(),getLayoutY(),getWidth(),getHeight())){
             if(MapGenerator.mapElements[myY][myX].getId().equals("point")){
                 Settings.score += Settings.pintForPoint; // Add points
                 Settings.groupGame.getChildren().remove(MapGenerator.mapElements[myY][myX]); // Remove from view
-                MapGenerator.mapElements[myY][myX] = MapGenerator.generateMapElement(myX, myY, "empty"); // Replace
+                MapGenerator.mapElements[myY][myX] = MapGenerator.generateMapElement(myX, myY); // Replace
             }else if(MapGenerator.mapElements[myY][myX].getId().equals("power")){
                 Settings.score += Settings.pintForPower;// Add points
                 Settings.powerUpTimeLeft = Settings.powerUpTime; // Set PowerUp
                 Settings.groupGame.getChildren().remove(MapGenerator.mapElements[myY][myX]); // Remove from view
-                MapGenerator.mapElements[myY][myX] = MapGenerator.generateMapElement(myX, myY, "empty"); // Replace
+                MapGenerator.mapElements[myY][myX] = MapGenerator.generateMapElement(myX, myY); // Replace
             }
         }
 
         // Sorry for _ variables
         for(int _y = myY - 1; _y <= myY + 1; _y++){
             for(int _x = myX - 1; _x <= myX + 1; _x++){
+
+                if(_x >= MapGenerator.mapElements[_y].length || _x < 0){
+                    return true;
+                }
 
                 // Check collision for movement
                 if(MapGenerator.mapElements[_y][_x].getBoundsInParent().intersects(getLayoutX() + x,getLayoutY() + y,getWidth(),getHeight()))

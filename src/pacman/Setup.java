@@ -91,7 +91,7 @@ public class Setup {
         Settings.health = 3;
 
         MapGenerator.start();
-        for(int i = 0; i < Settings.ghostCount; i++)
+        for(int i = 0; i < Settings.ghosts.length; i++)
             Settings.ghosts[i] = new Ghost();
         Settings.groupGame.getChildren().remove(GuiHandler.status);
         Settings.groupGame.getChildren().add(GuiHandler.status);

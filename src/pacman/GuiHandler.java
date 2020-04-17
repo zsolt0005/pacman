@@ -96,7 +96,7 @@ public class GuiHandler{
         // EndGame handler
         if(Settings.health <= 0)
             endGame();
-        if(Settings.score >= 2670){
+        if(Settings.score >= 2780){
 
             int pointsLeft = 0;
             for(int y = 0; y < MapGenerator.mapElements.length; y++) {

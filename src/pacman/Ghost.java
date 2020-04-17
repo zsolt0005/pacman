@@ -18,6 +18,7 @@ public class Ghost extends Canvas {
     GraphicsContext gc;
     Timeline t; // Timeline for draw
     Timeline t2; // Timeline for animation
+    Timeline t3; // For random new direction
 
     int direction = 1; // 0-UP 1-RIGHT 2-DOWN 3-LEFT
     int requestedDirection = 1; // For direction change
@@ -43,7 +44,6 @@ public class Ghost extends Canvas {
 
         // </editor-fold>
 
-            // TODO: Change to ghost center spawn: Spawn point
         setLayoutX( (15 * Settings.tileSize) + ( (Settings.tileSize - getWidth() ) / 2) );
         setLayoutY( (11 * Settings.tileSize) + ( (Settings.tileSize - getHeight() ) / 2) );
 
@@ -68,9 +68,30 @@ public class Ghost extends Canvas {
         t2.setCycleCount(Animation.INDEFINITE);
         t2.play();
 
+        // If PathFinding is disabled
+        if(Settings.difficulty == 0){
+
+            t3 = new Timeline(new KeyFrame(Duration.millis(100),e->{
+                if(direction != requestedDirection)
+                    return;
+
+                int newDirection = ThreadLocalRandom.current().nextInt(0, 4);
+                if(direction == 0 || direction == 2)
+                    while (newDirection == 0 || newDirection == 2)
+                        newDirection = ThreadLocalRandom.current().nextInt(0, 4);
+
+                if(direction == 1 || direction == 3)
+                    while (newDirection == 1 || newDirection == 3)
+                        newDirection = ThreadLocalRandom.current().nextInt(0, 4);
+
+                requestedDirection = newDirection;
+            }));
+            t3.setCycleCount(Animation.INDEFINITE);
+            t3.play();
+
+        }
+
         // </editor-fold>
-
-
 
             // Add to view
         Settings.groupGame.getChildren().add(this);
@@ -118,10 +139,10 @@ public class Ghost extends Canvas {
         // <editor-fold desc="Teleport">
 
         if(getLayoutX() < 0 - getWidth()){
-            setLayoutX(Settings.gameWidth);
+            setLayoutX(Settings.gameWidth - Settings.tileSize);
         }
         if(getLayoutX() > Settings.gameWidth){
-            setLayoutX(0 - getWidth());
+            setLayoutX(0);
         }
 
         // </editor-fold>
@@ -136,6 +157,11 @@ public class Ghost extends Canvas {
 
         // <editor-fold desc="Collision">
 
+        // Check collision for pickup
+        if(Settings.pacman != null)
+            if(Settings.pacman.getBoundsInParent().intersects(getLayoutX(),getLayoutY(),getWidth(),getHeight()))
+                Settings.pacman.isDead = true;
+
         // Predicted movement
         if(direction == 0)
             y = -((Settings.tileSize - getHeight()) / 2);
@@ -149,6 +175,10 @@ public class Ghost extends Canvas {
         // Sorry for _ variables
         for(int _y = myY - 1; _y <= myY + 1; _y++){
             for(int _x = myX - 1; _x <= myX + 1; _x++){
+
+                if(_x >= MapGenerator.mapElements[_y].length || _x < 0){
+                    return true;
+                }
 
                 // Check collision for movement
                 if(MapGenerator.mapElements[_y][_x].getBoundsInParent().intersects(getLayoutX() + x,getLayoutY() + y,getWidth(),getHeight()))
@@ -208,5 +238,7 @@ public class Ghost extends Canvas {
         gc.clearRect(0,0, getWidth(), getHeight()); // Clear canvas
         gc.drawImage(ghosts.get( (isDead ? 1 : 0) )[animationFrame], 0, 0, getWidth(), getHeight()); // Draw PacMan
     }
+
+    // TODO: A*
 
 }
