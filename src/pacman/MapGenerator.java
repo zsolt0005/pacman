@@ -6,10 +6,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import pacman.AStar.Walkable;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 public class MapGenerator {
-    static Button[][] mapElements;
+    public static Button[][] mapElements;
 
     public static void  start(){
         // Generates the map and all map elements
@@ -18,7 +16,13 @@ public class MapGenerator {
 
     static void generateMap(){
             // Clear map
-        Settings.groupGame.getChildren().removeAll();
+        if(mapElements != null)
+            for (int i = 0; i < mapElements.length; i++) {
+                for (int x = 0; x < mapElements[i].length; x++) {
+                    Settings.groupGame.getChildren().remove(mapElements[i][x]);
+                }
+            }
+
             // Cache images
         Image point = new Image("file:img/onMap/point.png");
         Image power = new Image("file:img/onMap/powerUp.png");
@@ -142,6 +146,7 @@ public class MapGenerator {
         b.setLayoutY(y * Settings.tileSize);
         b.setFocusTraversable(false);
         b.setId("empty");
+        Settings.groupGame.getChildren().add(b);
 
         return b;
     }

@@ -3,7 +3,6 @@ package pacman;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -125,14 +124,23 @@ public class Ghost extends Canvas {
 
         // </editor-fold>
 
-        // <editor-fold desc="Move">
+        // <editor-fold desc="Move (Difficulty 0)">
 
-        if(collisionDetection()){
-            isMoving = true;
-            setLayoutX(getLayoutX() + x);
-            setLayoutY(getLayoutY() + y);
-        }else
-            isMoving = false;
+        if(Settings.difficulty == 0)
+            if(collisionDetection()){
+                isMoving = true;
+                setLayoutX(getLayoutX() + x);
+                setLayoutY(getLayoutY() + y);
+            }else
+                isMoving = false;
+
+        // </editor-fold>
+
+        // <editor-fold desc="Move (Difficulty 1)">
+
+        if(Settings.difficulty == 1){
+
+        }
 
         // </editor-fold>
 
@@ -182,7 +190,7 @@ public class Ghost extends Canvas {
 
                 // Check collision for movement
                 if(MapGenerator.mapElements[_y][_x].getBoundsInParent().intersects(getLayoutX() + x,getLayoutY() + y,getWidth(),getHeight()))
-                    if(MapGenerator.mapElements[_y][_x].getId().equals("wall") || MapGenerator.mapElements[_y][_x].getId().equals("enemyWall"))
+                    if(MapGenerator.mapElements[_y][_x].getId().equals("wall"))
                         returnData = false;
 
             }

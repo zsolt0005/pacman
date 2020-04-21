@@ -54,10 +54,6 @@ public class Setup {
 
         MapGenerator.start(); // Launch map generator
 
-        // Spawn ghosts
-        for(int i = 0; i < Settings.ghostCount; i++)
-            Settings.ghosts[i] = new Ghost();
-
         GuiHandler.start(); // Launch UI handler
 
             // Set key detection
@@ -68,8 +64,10 @@ public class Setup {
 
         // <editor-fold desc="Developer build">
 
-        if(Settings.devBuild)
+        if(Settings.devBuild){
             new Developer(); // Calls for developer build
+            Settings.ghostCount = 1;
+        }
 
         // </editor-fold>
     }
@@ -91,7 +89,7 @@ public class Setup {
         Settings.health = 3;
 
         MapGenerator.start();
-        for(int i = 0; i < Settings.ghosts.length; i++)
+        for(int i = 0; i < Settings.ghostCount; i++)
             Settings.ghosts[i] = new Ghost();
         Settings.groupGame.getChildren().remove(GuiHandler.status);
         Settings.groupGame.getChildren().add(GuiHandler.status);
@@ -112,6 +110,9 @@ public class Setup {
             Settings.isStarted = true;
             Settings.pacman = new PacMan();
             Settings.groupGame.getChildren().add(Settings.pacman);
+            // Spawn ghosts
+            for(int i = 0; i < Settings.ghostCount; i++)
+                Settings.ghosts[i] = new Ghost();
         }
             // Restart game
         if(e.getCode() == KeyCode.ENTER && Settings.isGameOver)

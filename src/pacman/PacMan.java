@@ -157,7 +157,6 @@ public class PacMan extends Canvas {
         if(direction == 3)
             x = -((Settings.tileSize - getWidth()) / 2);
 
-        // TODO: After restart doesnt work
         // Check collision for pickup
         if(MapGenerator.mapElements[myY][myX].getBoundsInParent().intersects(getLayoutX(),getLayoutY(),getWidth(),getHeight())){
             if(MapGenerator.mapElements[myY][myX].getId().equals("point")){
@@ -182,7 +181,7 @@ public class PacMan extends Canvas {
 
                 // Check collision for movement
                 if(MapGenerator.mapElements[_y][_x].getBoundsInParent().intersects(getLayoutX() + x,getLayoutY() + y,getWidth(),getHeight()))
-                    if(MapGenerator.mapElements[_y][_x].getId().equals("wall") || MapGenerator.mapElements[_y][_x].getId().equals("enemyWall"))
+                    if(MapGenerator.mapElements[_y][_x].getId().equals("wall"))
                         returnData = false;
 
             }
@@ -228,7 +227,7 @@ public class PacMan extends Canvas {
     }
 
     void animation(){
-        if(!isMoving)
+        if(!isMoving && !isDead)
             return;
 
         if(!isDead){
@@ -250,6 +249,4 @@ public class PacMan extends Canvas {
         gc.clearRect(0,0, getWidth(), getHeight()); // Clear canvas
         gc.drawImage(pacmans[animationFrame], 0, 0, getWidth(), getHeight()); // Draw PacMan
     }
-
-    // TODO: After restart PacMan doesnt eat points and powerUps
 }
