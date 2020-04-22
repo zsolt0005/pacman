@@ -32,3 +32,8 @@
     -fx-border-width: 0;
     -fx-padding: 0;
 }
+#path{
+    -fx-background-color: rgba(0, 255, 0, 1);
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}

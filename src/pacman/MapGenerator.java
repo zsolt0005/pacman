@@ -67,7 +67,7 @@ public class MapGenerator {
             // Apply map elements based on the blueprint
         for(int y = 0; y < mapY.length; y++){
             for(int x = 0; x < mapY[y].length(); x++){
-                Button b = new Button();
+                Button b = new Button();;
                     // Place wall
                 if(mapY[y].charAt(x) == 'x'){
                     b.setPrefWidth(Settings.tileSize);
@@ -81,6 +81,7 @@ public class MapGenerator {
                 }
                     // Place point
                 if(mapY[y].charAt(x) == 'p'){
+                    b = new Walkable(x, y);
                     ImageView iv_cache = new ImageView(point);
                     iv_cache.setFitWidth(Settings.tileSize / 4);
                     iv_cache.setFitHeight(Settings.tileSize / 4);
@@ -96,6 +97,7 @@ public class MapGenerator {
                 }
                     // Place powerUp
                 if(mapY[y].charAt(x) == 'u'){
+                    b = new Walkable(x, y);
                     ImageView iv_cache = new ImageView(power);
                     iv_cache.setFitWidth(Settings.tileSize / 2);
                     iv_cache.setFitHeight(Settings.tileSize / 2);
@@ -112,7 +114,7 @@ public class MapGenerator {
 
                 // Place enemy walkable wall
                 if(mapY[y].charAt(x) == ' '){
-                    b = new Walkable();
+                    b = new Walkable(x, y);
                     b.setPrefWidth(Settings.tileSize);
                     b.setPrefHeight(Settings.tileSize);
                     b.setLayoutX(x * Settings.tileSize);
@@ -139,7 +141,7 @@ public class MapGenerator {
 
     static Walkable generateMapElement(int x, int y){
 
-        Walkable b = new Walkable();
+        Walkable b = new Walkable(x, y);
         b.setPrefWidth(Settings.tileSize);
         b.setPrefHeight(Settings.tileSize);
         b.setLayoutX(x * Settings.tileSize);

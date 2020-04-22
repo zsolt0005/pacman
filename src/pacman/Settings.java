@@ -23,7 +23,7 @@ public class Settings {
     public static int ghostCount = 4; // Ghosts count
     public static Ghost[] ghosts = new Ghost[ghostCount]; // PacMan cahracter
     public static int health = 1; // Health
-    public static int difficulty = 0; // 0 - random location | 1 - PathFinding | 2 - PathFinding  walls
+    public static int difficulty = 1; // 0 - random location | 1 - PathFinding | 2 - PathFinding with Wallhack
 
     // Game
     public static int pintForPoint = 10; // How many points you get after point collision
