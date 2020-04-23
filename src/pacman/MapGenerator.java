@@ -150,6 +150,16 @@ public class MapGenerator {
         b.setId("empty");
         Settings.groupGame.getChildren().add(b);
 
+        // For developer build
+        if(Settings.devBuild){
+            b.setOnMouseMoved(e->{
+                Settings.hoverPoint = new Point2D(
+                        (int)( (e.getSceneX() - Settings.groupGame.getLayoutX()) / Settings.tileSize),
+                        (int)( (e.getSceneY() - Settings.groupGame.getLayoutY()) / Settings.tileSize)
+                );
+            });
+        }
+
         return b;
     }
 }

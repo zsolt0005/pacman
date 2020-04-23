@@ -3,10 +3,12 @@ package pacman;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
+import pacman.AStar.Walkable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +20,16 @@ public class Ghost extends Canvas {
     Timeline t; // Timeline for draw
     Timeline t2; // Timeline for animation
     Timeline t3; // For random new direction
+    public Point2D position; // Position
 
     int direction = 1; // 0-UP 1-RIGHT 2-DOWN 3-LEFT
     int requestedDirection = 1; // For direction change
 
     boolean isDead = false; // alive/dead state
     boolean isMoving = false; // moving state
+
+    // PathFinding
+    List<Walkable> path = new ArrayList<>();
 
     // For animation
     int animationFrame = 0;
@@ -97,10 +103,15 @@ public class Ghost extends Canvas {
     }
 
     void movement(){
+        position = new Point2D( (int)(getLayoutX() / Settings.tileSize ), (int)(getLayoutY() / Settings.tileSize) );
         double x = 0;
         double y = 0;
 
-        // <editor-fold desc="Set speed">
+        // <editor-fold desc="Move (Difficulty 0)">
+
+        if(Settings.difficulty == 0){
+
+            // <editor-fold desc="Set speed">
             if(direction == 0)
                 y = -Settings.speed;
             if(direction == 1)
@@ -110,6 +121,79 @@ public class Ghost extends Canvas {
             if(direction == 3)
                 x = -Settings.speed;
 
+            // </editor-fold>
+
+            if(collisionDetection()){
+                isMoving = true;
+                setLayoutX(getLayoutX() + x);
+                setLayoutY(getLayoutY() + y);
+            }else
+                isMoving = false;
+        }
+
+        // </editor-fold>
+
+        // <editor-fold desc="Move (Difficulty 1 or 2)">
+
+        if(Settings.difficulty != 0){
+
+            if(path.size() > 0){
+                x = 0;
+                y = 0;
+                // Move
+                    // Set x and y speed
+                double pathX = path.get(0).realPosition.getX() + ((Settings.tileSize - getWidth()) / 2);
+                double pathY = path.get(0).realPosition.getY()+ ((Settings.tileSize - getHeight()) / 2);
+                double myX = (double) Math.round(getLayoutX() * 100) / 100;
+                double myY = (double) Math.round(getLayoutY() * 100) / 100;
+
+                double distX = (double) Math.round((pathX - myX) * 100) / 100;
+                double distY = (double) Math.round((pathY - myY) * 100) / 100;
+
+                if(distX > 0){
+                    x = Settings.speed;
+                    requestedDirection = 1;
+                }
+                if(distX < 0){
+                    x = -Settings.speed;
+                    requestedDirection = 3;
+                }
+                if(distY > 0){
+                    y = Settings.speed;
+                    requestedDirection = 2;
+                }
+                if(distY < 0){
+                    y = -Settings.speed;
+                    requestedDirection = 0;
+                }
+
+                if(x == 0 && y == 0)
+                    path.remove(0);
+
+                System.out.println(myX + " -> " + pathX + " : " + distX + "(" + x + ") -- " + direction );
+                System.out.println(myY + " -> " + pathY + " : " + distY + "(" + y + ") -- " + direction );
+
+                    // Move the ghost
+                if(collisionDetection()){
+                    isMoving = true;
+                    setLayoutX(getLayoutX() + x);
+                    setLayoutY(getLayoutY() + y);
+                }else
+                    isMoving = false;
+
+            }
+
+            // Get path
+                // Developer build
+            if(Settings.devBuild && Developer.lastPath.size() > 0){
+                path.clear();
+                for (Walkable w : Developer.lastPath)
+                    path.add(w);
+            }
+
+            // TODO: Get path for difficulty 1 and 2 with no developer
+
+        }
 
         // </editor-fold>
 
@@ -121,26 +205,6 @@ public class Ghost extends Canvas {
             setLayoutX(optimalX);
         if( (direction == 1 || direction == 3) && getLayoutY() != optimalY)
             setLayoutY(optimalY);
-
-        // </editor-fold>
-
-        // <editor-fold desc="Move (Difficulty 0)">
-
-        if(Settings.difficulty == 0)
-            if(collisionDetection()){
-                isMoving = true;
-                setLayoutX(getLayoutX() + x);
-                setLayoutY(getLayoutY() + y);
-            }else
-                isMoving = false;
-
-        // </editor-fold>
-
-        // <editor-fold desc="Move (Difficulty 1)">
-
-        if(Settings.difficulty == 1){
-
-        }
 
         // </editor-fold>
 

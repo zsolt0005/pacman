@@ -4,7 +4,6 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.util.Duration;
 import pacman.AStar.Pathfinding;
@@ -18,7 +17,7 @@ public class Developer {
     Timeline t;
     Timeline t2; // PathFinding
     Button devSqr = new Button();
-    List<Walkable> lastPath = new ArrayList<>();
+    public static List<Walkable> lastPath = new ArrayList<>();
 
     public Developer(){
         Settings.groupGame.setOnMouseMoved(e->{
@@ -98,17 +97,25 @@ public class Developer {
         if(!Settings.canTarget)
             return;
 
+        if(Settings.hoverPoint.getY() > Settings.yTileCount - 1)
+            return;
+        if(Settings.hoverPoint.getX() > Settings.xTileCount - 1)
+            return;
+
         // Prepare visuals
 
         // Get ghost and hover position
-        Walkable startNode = (Walkable) MapGenerator.mapElements[ ( (int)(Settings.ghosts[0].getLayoutY() / Settings.tileSize) ) ][( (int)(Settings.ghosts[0].getLayoutX() / Settings.tileSize) )];
+        Walkable startNode = (Walkable) MapGenerator.mapElements[ ( (int)(Settings.ghosts[0].position.getY()) ) ][( (int)(Settings.ghosts[0].position.getX()) )];
         Walkable endNode = (Walkable) MapGenerator.mapElements[(int)Settings.hoverPoint.getY()][(int)Settings.hoverPoint.getX()];
 
         Pathfinding p = new Pathfinding(startNode, endNode);
 
         for (Walkable node : p.foundPath) {
             Walkable w = new Walkable((int)node.position.getX(), (int)node.position.getY());
-            w.setId("path");
+            if(Settings.devDebug)
+                w.setId("path");
+            else
+                w.setId("empty");
             w.setLayoutX(w.position.getX() * Settings.tileSize);
             w.setLayoutY(w.position.getY() * Settings.tileSize);
             w.setPrefWidth(Settings.tileSize);

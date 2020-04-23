@@ -11,6 +11,7 @@ import java.util.List;
 public class Walkable extends Button {
 
     public Point2D position; // Position
+    public Point2D realPosition; // Position
 
     public Walkable parent; // Parent node
 
@@ -23,6 +24,7 @@ public class Walkable extends Button {
 
     public Walkable(int posX, int posY){
         this.position = new Point2D(posX, posY); // Create walkable path and store its position on the map
+        this.realPosition = new Point2D(posX * Settings.tileSize, posY * Settings.tileSize);
     }
 
     public List<Walkable> getNeighbours(){
