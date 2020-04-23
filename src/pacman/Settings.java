@@ -23,13 +23,12 @@ public class Settings {
     public static int ghostCount = 4; // Ghosts count
     public static Ghost[] ghosts = new Ghost[ghostCount]; // PacMan cahracter
     public static int health = 1; // Health
-    public static int difficulty = 1; // 0 - random location | 1 - PathFinding | 2 - PathFinding with Wallhack
+    public static int difficulty = 2; // 0 - random location | 1 - PathFinding | 2 - PathFinding with WallHack
 
     // Game
     public static int pintForPoint = 10; // How many points you get after point collision
     public static int pintForPower = 25; // How many points you get after powerUp collision
     public static int powerUpTime = 10; // How long will powerUp last
-    public static int powerUpTimeLeft = 0; // How long will powerUp last
     public static double speed = 0.1; // Moving speed
 
     // Resolution settings
@@ -65,7 +64,7 @@ public class Settings {
     public static final double fontMultiplier = 0.01; // Font responsive multiplier
 
     // DEVELOPER
-    public static final boolean devBuild = true; // Developer build enabled/disabled (Enables cursor too)
+    public static final boolean devBuild = false; // Developer build enabled/disabled (Enables cursor too)
     public static boolean canTarget = false; // Can be target targeted ?
     public static Point2D hoverPoint = new Point2D(0.0,0.0); // Developer target point
     public static boolean devDebug = true; // Show PathFinding path

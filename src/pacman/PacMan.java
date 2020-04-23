@@ -10,9 +10,13 @@ import javafx.util.Duration;
 
 public class PacMan extends Canvas {
 
+    public boolean hasPowerUp = false;
+    public int powerUpTimeLeft = 0;
+
     GraphicsContext gc;
     Timeline t; // Timeline for draw
     Timeline t2; // Timeline for animation
+    Timeline t3; // Timeline for powerup
 
     int direction = 1; // 0-UP 1-RIGHT 2-DOWN 3-LEFT
     int requestedDirection = 1; // For direction change
@@ -57,8 +61,23 @@ public class PacMan extends Canvas {
         t2.setCycleCount(Animation.INDEFINITE);
         t2.play();
 
+        t3 = new Timeline(new KeyFrame(Duration.millis(1000), e->{
+            if(Settings.isPaused || !hasPowerUp)
+                return;
+
+            powerUpCount();
+        }));
+        t3.setCycleCount(Animation.INDEFINITE);
+        t3.play();
+
         // </editor-fold>
 
+    }
+
+    void powerUpCount(){
+        powerUpTimeLeft--;
+        if(powerUpTimeLeft <= 0)
+            hasPowerUp = false;
     }
 
     public void die(){
@@ -165,7 +184,8 @@ public class PacMan extends Canvas {
                 MapGenerator.mapElements[myY][myX] = MapGenerator.generateMapElement(myX, myY); // Replace
             }else if(MapGenerator.mapElements[myY][myX].getId().equals("power")){
                 Settings.score += Settings.pintForPower;// Add points
-                Settings.powerUpTimeLeft = Settings.powerUpTime; // Set PowerUp
+                hasPowerUp = true;
+                powerUpTimeLeft = Settings.powerUpTime; // Set PowerUp
                 Settings.groupGame.getChildren().remove(MapGenerator.mapElements[myY][myX]); // Remove from view
                 MapGenerator.mapElements[myY][myX] = MapGenerator.generateMapElement(myX, myY); // Replace
             }

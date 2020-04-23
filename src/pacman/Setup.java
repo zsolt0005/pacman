@@ -9,12 +9,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
 
+import java.util.HashSet;
+
 public class Setup {
 
     static Timeline mainTimer;
 
     public static void setup(){
-
         Settings.load();
 
         // <editor-fold desc="Setup stage">
@@ -83,6 +84,7 @@ public class Setup {
         if(Settings.pacman != null){
             Settings.pacman.t.stop();
             Settings.pacman.t2.stop();
+            Settings.pacman.t3.stop();
             Settings.groupGame.getChildren().remove(Settings.pacman);
             Settings.pacman = null;
         }
