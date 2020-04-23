@@ -30,6 +30,7 @@ public class Ghost extends Canvas {
 
     // PathFinding
     List<Walkable> path = new ArrayList<>();
+    int beforeCenter = 200;
 
     // For animation
     int animationFrame = 0;
@@ -140,16 +141,15 @@ public class Ghost extends Canvas {
             if(path.size() > 0){
                 x = 0;
                 y = 0;
-                // Move
-                    // Set x and y speed
+                    // Get path, position and distance
                 double pathX = path.get(0).realPosition.getX() + ((Settings.tileSize - getWidth()) / 2);
                 double pathY = path.get(0).realPosition.getY()+ ((Settings.tileSize - getHeight()) / 2);
                 double myX = (double) Math.round(getLayoutX() * 100) / 100;
                 double myY = (double) Math.round(getLayoutY() * 100) / 100;
-
                 double distX = (double) Math.round((pathX - myX) * 100) / 100;
                 double distY = (double) Math.round((pathY - myY) * 100) / 100;
 
+                    // Set speed
                 if(distX > 0){
                     x = Settings.speed;
                     requestedDirection = 1;
@@ -165,6 +165,22 @@ public class Ghost extends Canvas {
                 if(distY < 0){
                     y = -Settings.speed;
                     requestedDirection = 0;
+                }
+
+                    // If cant move, center the closest point (x or y)
+                if(x != 0 && y != 0){
+                    beforeCenter--;
+                    if(beforeCenter <= 0){
+                        if(Math.abs(distX) > Math.abs(distY) ){
+                            y = 0;
+                            setLayoutY(( (int)(getLayoutY() / Settings.tileSize) * Settings.tileSize ) + ((Settings.tileSize - getHeight()) / 2));
+                        }
+                        else{
+                            x = 0;
+                            setLayoutX(( (int)(getLayoutX() / Settings.tileSize) * Settings.tileSize ) + ((Settings.tileSize - getWidth()) / 2));
+                        }
+                        beforeCenter = 200;
+                    }
                 }
 
                 if(x == 0 && y == 0)
@@ -191,7 +207,21 @@ public class Ghost extends Canvas {
                     path.add(w);
             }
 
-            // TODO: Get path for difficulty 1 and 2 with no developer
+            if(Settings.difficulty == 2){
+                // Hard difficulty, WallHack for every ghost
+            }
+
+            if(Settings.difficulty == 1){
+                // Pick location based how many % of all points player picked up
+                // 0-20% -> Only random location pick
+                // 21-50% -> If inline with player follow to the last seen point
+                // 51-75% -> If player is close enough, follow through walls
+                // 76 - 100% -> Follow like hard difficulty
+            }
+
+            if(isDead){
+                // If dead, go back to spawn location
+            }
 
         }
 
