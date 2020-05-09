@@ -29,12 +29,12 @@ public class Ghost extends Canvas {
     double speed = Settings.speed;
 
     boolean isDead = false; // alive/dead state
-    boolean haveDeadPath = false;
     boolean isMoving = false; // moving state
 
     // PathFinding
     List<Walkable> path = new ArrayList<>();
     int beforeCenter = 200;
+    int beforeHardJump = 1000;
     Walkable startNode;
     Walkable endNode;
     double percent = 0;
@@ -87,23 +87,13 @@ public class Ghost extends Canvas {
 
             t3 = new Timeline(new KeyFrame(Duration.millis(100),e->{
 
-                if(isDead && !haveDeadPath){
-                    if(speed != Settings.speed)
-                        speed = Settings.speed;
-
-                    path.clear();
-                    // If dead, go back to spawn location
-                    // Get ghost and spawn position
-                    Walkable startNode = (Walkable) MapGenerator.mapElements[ ( (int)(position.getY()) ) ][( (int)(position.getX()) )];
-                    Walkable endNode = (Walkable) MapGenerator.mapElements[11][15];
-
-                    Pathfinding p = new Pathfinding(startNode, endNode);
-
-                    path = p.foundPath;
-
-                    haveDeadPath = true;
+                if(isDead)
                     return;
-                }
+
+                if(Settings.pacman.hasPowerUp)
+                    speed = Settings.speed / 2;
+                else
+                    speed = Settings.speed;
 
                 if(direction != requestedDirection)
                     return;
@@ -141,6 +131,8 @@ public class Ghost extends Canvas {
 
                     return;
                 }
+
+                // If PacMan has powerUp find location away from him
 
                 if(speed == Settings.speed)
                     speed = speed / 2;
@@ -202,7 +194,6 @@ public class Ghost extends Canvas {
             }));
             t3.setCycleCount(Animation.INDEFINITE);
             t3.play();
-
         }
 
         // </editor-fold>
@@ -217,8 +208,7 @@ public class Ghost extends Canvas {
         double y = 0;
 
         // Follow path
-        if( (Settings.difficulty != 0 && path.size() > 0) || (isDead && haveDeadPath && path.size() > 0) ){
-            System.out.println("Following path");
+        if( path.size() > 0 ){
             x = 0;
             y = 0;
             // Get path, position and distance
@@ -228,6 +218,10 @@ public class Ghost extends Canvas {
             double myY = (double) Math.round(getLayoutY() * 100) / 100;
             double distX = (double) Math.round((pathX - myX) * 100) / 100;
             double distY = (double) Math.round((pathY - myY) * 100) / 100;
+
+            System.out.println("Path: " + pathX + " " + pathY);
+            System.out.println("My p: " + myX + " " + myY);
+            System.out.println("Dist: " + distX + " " + distY);
 
             // Set speed
             if(distX > 0){
@@ -250,29 +244,39 @@ public class Ghost extends Canvas {
             // If cant move, center the closest point (x or y)
             if(x != 0 && y != 0){
                 beforeCenter--;
+                beforeHardJump--;
                 if(beforeCenter <= 0){
                     if(Math.abs(distX) > Math.abs(distY) ){
                         y = 0;
-                        setLayoutY(( (int)(getLayoutY() / Settings.tileSize) * Settings.tileSize ) + ((Settings.tileSize - getHeight()) / 2));
+                        setLayoutY(( (int)Math.round(getLayoutY() / Settings.tileSize) * Settings.tileSize ) + ((Settings.tileSize - getHeight()) / 2));
                     }
                     else{
                         x = 0;
-                        setLayoutX(( (int)(getLayoutX() / Settings.tileSize) * Settings.tileSize ) + ((Settings.tileSize - getWidth()) / 2));
+                        setLayoutX(( (int)Math.round(getLayoutX() / Settings.tileSize) * Settings.tileSize ) + ((Settings.tileSize - getWidth()) / 2));
                     }
                     beforeCenter = 200;
                 }
+
+                if(beforeHardJump <= 0){
+
+                    // If stuck for more than 1 sec
+                    setLayoutX( (15 * Settings.tileSize) + ( (Settings.tileSize - getWidth() ) / 2) );
+                    setLayoutY( (11 * Settings.tileSize) + ( (Settings.tileSize - getHeight() ) / 2) );
+
+                    if(isDead)
+                        isDead = false;
+                    path.clear();
+                    beforeHardJump = 1000;
+                }
             }
 
-            System.out.println(x + " " + y);
             // Move the ghost
             if(collisionDetection(0)){
                 isMoving = true;
-                System.out.println("Moving....");
                 setLayoutX(getLayoutX() + x);
                 setLayoutY(getLayoutY() + y);
             }else{
                 isMoving = false;
-                System.out.println("Not moving");
                 if(x != 0 || y != 0){
                     // Prevent stuck while dead (I don't know why it happened but it removes this bug)
                     setLayoutY(( (int)(getLayoutY() / Settings.tileSize) * Settings.tileSize ) + ((Settings.tileSize - getHeight()) / 2));
@@ -280,33 +284,18 @@ public class Ghost extends Canvas {
                 }
             }
 
-            if(x == 0 && y == 0){
+            if(x == 0 && y == 0 || distX == 0.05 && distY == 0 || distY == 0.05 && distX == 0){
                 path.remove(0);
                 if(path.size() == 0)
-                    if(isDead){
+                    if(isDead)
                         isDead = false;
-                        haveDeadPath = false;
-                    }
             }
         }
 
-        // If dead
-        if(isDead && !haveDeadPath){
-            if(speed != Settings.speed)
-                speed = Settings.speed;
-
-            path.clear();
-            // If dead, go back to spawn location
-            // Get ghost and spawn position
-            Walkable startNode = (Walkable) MapGenerator.mapElements[ ( (int)(position.getY()) ) ][( (int)(position.getX()) )];
-            Walkable endNode = (Walkable) MapGenerator.mapElements[11][15];
-
-            Pathfinding p = new Pathfinding(startNode, endNode);
-
-            path = p.foundPath;
-
-            haveDeadPath = true;
-        }
+        // If dead and there is no path left
+        if(path.size() == 0)
+            if(isDead)
+                isDead = false;
 
         // Developer build
         if(!isDead && Settings.devBuild && Developer.lastPath.size() > 0){
@@ -316,7 +305,7 @@ public class Ghost extends Canvas {
 
         // <editor-fold desc="Move (Difficulty 0)">
 
-        if(Settings.difficulty == 0){
+        if(Settings.difficulty == 0 && !isDead){
 
             // <editor-fold desc="Set speed">
             if(direction == 0)
@@ -499,7 +488,17 @@ public class Ghost extends Canvas {
                 if(Settings.pacman.getBoundsInParent().intersects(getLayoutX(),getLayoutY(),getWidth(),getHeight()))
                     if(Settings.pacman.hasPowerUp){
                         isDead = true;
+                        if(speed != Settings.speed)
+                            speed = Settings.speed;
+
                         path.clear();
+                        // If dead, go back to spawn location
+                        // Get ghost and spawn position
+                        Walkable startNode = (Walkable) MapGenerator.mapElements[ ( (int)Math.round(position.getY()) ) ][( (int)Math.round(position.getX()) )];
+                        Walkable endNode = (Walkable) MapGenerator.mapElements[11][15];
+
+                        Pathfinding p = new Pathfinding(startNode, endNode);
+                        path = p.foundPath;
                     }
                     else
                         Settings.pacman.isDead = true;
