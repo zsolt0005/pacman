@@ -20,7 +20,7 @@ public class Settings {
     public static boolean isGameOver = false; // Game over (Win/Lose)
     public static boolean isStarted = false; // First launch
     public static PacMan pacman = null; // PacMan character
-    public static int ghostCount = 1; // Ghosts count
+    public static int ghostCount = 4; // Ghosts count
     public static Ghost[] ghosts = new Ghost[ghostCount]; // PacMan character
     public static int health = 3; // Health
     public static int difficulty = 1; // 0 - random location | 1 - PathFinding
@@ -64,7 +64,7 @@ public class Settings {
     public static final double fontMultiplier = 0.01; // Font responsive multiplier
 
     // DEVELOPER
-    public static final boolean devBuild = false; // Developer build enabled/disabled (Enables cursor too)
+    public static boolean devBuild = false; // Developer build enabled/disabled (Enables cursor too)
     public static boolean canTarget = false; // Can be target targeted ?
     public static Point2D hoverPoint = new Point2D(0.0,0.0); // Developer target point
     public static boolean devDebug = true; // Show PathFinding path
