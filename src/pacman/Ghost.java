@@ -686,5 +686,3 @@ public class Ghost extends Canvas {
     }
 
 }
-
-// TODO: If dead and collides again, ghost stops moving

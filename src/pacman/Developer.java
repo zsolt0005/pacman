@@ -103,6 +103,11 @@ public class Developer {
             return;
 
         // Prepare visuals
+        if(Settings.isGameOver || Settings.ghosts[0] == null || MapGenerator.mapElements.length != Settings.yTileCount)
+            return;
+
+        if(Settings.ghosts[0].position == null)
+            return;
 
         // Get ghost and hover position
         Walkable startNode = (Walkable) MapGenerator.mapElements[ ( (int)(Settings.ghosts[0].position.getY()) ) ][( (int)(Settings.ghosts[0].position.getX()) )];

@@ -5,16 +5,11 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 public class Setup {
 
@@ -25,66 +20,69 @@ public class Setup {
 
         // <editor-fold desc="PopUps">
 
-        ButtonType okButton = new ButtonType("OK");
-        ButtonType yesButton = new ButtonType("Yes");
-        ButtonType noButton = new ButtonType("No");
-        ButtonType diff1Button = new ButtonType("Difficulty 1");
-        ButtonType diff2Button = new ButtonType("Difficulty 2");
+        if(Settings.askOnstart){
+            ButtonType okButton = new ButtonType("OK");
+            ButtonType yesButton = new ButtonType("Yes");
+            ButtonType noButton = new ButtonType("No");
+            ButtonType diff1Button = new ButtonType("Difficulty 1");
+            ButtonType diff2Button = new ButtonType("Difficulty 2");
 
-        Alert tutorial = new Alert(Alert.AlertType.NONE);
-        tutorial.setTitle("Tutorial");
-        tutorial.setContentText("Movement: WASD\n" +
-                "If you collect all the points on the map, you WIN\n" +
-                "If you lose all your health you LOSE\n" +
-                "Each collision with ghosts reduce your health");
-        tutorial.getButtonTypes().setAll(okButton);
-        tutorial.showAndWait();
+            Alert tutorial = new Alert(Alert.AlertType.NONE);
+            tutorial.setTitle("Tutorial");
+            tutorial.setContentText("Movement: WASD\n" +
+                    "If you collect all the points on the map, you WIN\n" +
+                    "If you lose all your health you LOSE\n" +
+                    "Each collision with ghosts reduce your health");
+            tutorial.getButtonTypes().setAll(okButton);
+            tutorial.showAndWait();
 
-        Alert developer = new Alert(Alert.AlertType.NONE);
-        developer.setTitle("Developer build");
-        developer.setHeaderText("Enable developer build ?");
-        developer.setContentText("With developer build enabled, you can control your character with WASD\n" +
-                        "Only one ghost will be spawned\n" +
-                "The ghost will PathFind to your mouse location");
-        developer.getButtonTypes().setAll(yesButton, noButton);
-        developer.showAndWait().ifPresent(t -> {
-            if(t == yesButton)
-                Settings.devBuild = true;
-            else
-                Settings.devBuild = false;
-        });
-
-        if(Settings.devBuild){
-            Alert trace = new Alert(Alert.AlertType.NONE);
-            trace.setTitle("Visual effects");
-            trace.setHeaderText("Visualise your mouse position and PathFinding path ?");
-            trace.setContentText("Enabling this option will draw the Path of the ghost and\n" +
-                    "the mouse position will be highlighted");
-            trace.getButtonTypes().setAll(yesButton, noButton);
-            trace.showAndWait().ifPresent(t -> {
+            Alert developer = new Alert(Alert.AlertType.NONE);
+            developer.setTitle("Developer build");
+            developer.setHeaderText("Enable developer build ?");
+            developer.setContentText("With developer build enabled, you can control your character with WASD\n" +
+                    "Only one ghost will be spawned\n" +
+                    "The ghost will PathFind to your mouse location");
+            developer.getButtonTypes().setAll(yesButton, noButton);
+            developer.showAndWait().ifPresent(t -> {
                 if(t == yesButton)
-                    Settings.devDebug = true;
+                    Settings.devBuild = true;
                 else
-                    Settings.devDebug = false;
+                    Settings.devBuild = false;
             });
-        }else{
-            Alert difficulty = new Alert(Alert.AlertType.NONE);
-            difficulty.setTitle("Difficulty");
-            difficulty.setHeaderText("Choose difficulty level");
-            difficulty.setContentText("1 - Ghosts will move randomly, at each crossroad will decide new direction\n" +
-                    "2 - PathFinding: based on points collected\n" +
-                    "\t0-20% randomly generated path\n" +
-                    "\t21-50% randomly generated path, if ghost sees PacMan, follows him\n" +
-                    "\t51-90% randomly generated path, if ghost sees PacMan or detect him in 6x6 block around, follows him\n" +
-                    "\t90+% follow PacMan through the whole map");
-            difficulty.getButtonTypes().setAll(diff1Button, diff2Button);
-            difficulty.showAndWait().ifPresent(t -> {
-                if(t == diff1Button)
-                    Settings.difficulty = 0;
-                else
-                    Settings.difficulty = 1;
-            });
+
+            if(Settings.devBuild){
+                Alert trace = new Alert(Alert.AlertType.NONE);
+                trace.setTitle("Visual effects");
+                trace.setHeaderText("Visualise your mouse position and PathFinding path ?");
+                trace.setContentText("Enabling this option will draw the Path of the ghost and\n" +
+                        "the mouse position will be highlighted");
+                trace.getButtonTypes().setAll(yesButton, noButton);
+                trace.showAndWait().ifPresent(t -> {
+                    if(t == yesButton)
+                        Settings.devDebug = true;
+                    else
+                        Settings.devDebug = false;
+                });
+            }else{
+                Alert difficulty = new Alert(Alert.AlertType.NONE);
+                difficulty.setTitle("Difficulty");
+                difficulty.setHeaderText("Choose difficulty level");
+                difficulty.setContentText("1 - Ghosts will move randomly, at each crossroad will decide new direction\n" +
+                        "2 - PathFinding: based on points collected\n" +
+                        "\t0-20% randomly generated path\n" +
+                        "\t21-50% randomly generated path, if ghost sees PacMan, follows him\n" +
+                        "\t51-90% randomly generated path, if ghost sees PacMan or detect him in 6x6 block around, follows him\n" +
+                        "\t90+% follow PacMan through the whole map");
+                difficulty.getButtonTypes().setAll(diff1Button, diff2Button);
+                difficulty.showAndWait().ifPresent(t -> {
+                    if(t == diff1Button)
+                        Settings.difficulty = 0;
+                    else
+                        Settings.difficulty = 1;
+                });
+            }
         }
+
 
         // </editor-fold>
 
@@ -159,11 +157,14 @@ public class Setup {
             Settings.pacman = null;
         }
         for(int i = 0; i < Settings.ghosts.length; i++){
-            Settings.ghosts[i].t.stop();
-            Settings.ghosts[i].t2.stop();
-            Settings.ghosts[i].t3.stop();
-            Settings.groupGame.getChildren().remove(Settings.ghosts[i]);
-            Settings.ghosts[i] = null;
+            if(Settings.ghosts[i] != null){
+                Settings.ghosts[i].t.stop();
+                Settings.ghosts[i].t2.stop();
+                if(Settings.ghosts[i].t3 != null)
+                    Settings.ghosts[i].t3.stop();
+                Settings.groupGame.getChildren().remove(Settings.ghosts[i]);
+                Settings.ghosts[i] = null;
+            }
         }
 
         Settings.health = 3;

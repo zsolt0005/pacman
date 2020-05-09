@@ -64,10 +64,11 @@ public class Settings {
     public static final double fontMultiplier = 0.01; // Font responsive multiplier
 
     // DEVELOPER
-    public static boolean devBuild = false; // Developer build enabled/disabled (Enables cursor too)
+    public static boolean devBuild = true; // Developer build enabled/disabled (Enables cursor too)
     public static boolean canTarget = false; // Can be target targeted ?
     public static Point2D hoverPoint = new Point2D(0.0,0.0); // Developer target point
     public static boolean devDebug = true; // Show PathFinding path
+    public static final boolean askOnstart = true; // Show startup PopUps
 
     // CACHE
     public static Image[] pacmans = {
