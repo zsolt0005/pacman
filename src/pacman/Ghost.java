@@ -219,10 +219,6 @@ public class Ghost extends Canvas {
             double distX = (double) Math.round((pathX - myX) * 100) / 100;
             double distY = (double) Math.round((pathY - myY) * 100) / 100;
 
-            System.out.println("Path: " + pathX + " " + pathY);
-            System.out.println("My p: " + myX + " " + myY);
-            System.out.println("Dist: " + distX + " " + distY);
-
             // Set speed
             if(distX > 0){
                 x = speed;

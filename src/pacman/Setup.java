@@ -90,6 +90,14 @@ public class Setup {
             Settings.groupGame.getChildren().remove(Settings.pacman);
             Settings.pacman = null;
         }
+        for(int i = 0; i < Settings.ghosts.length; i++){
+            Settings.ghosts[i].t.stop();
+            Settings.ghosts[i].t2.stop();
+            Settings.ghosts[i].t3.stop();
+            Settings.groupGame.getChildren().remove(Settings.ghosts[i]);
+            Settings.ghosts[i] = null;
+        }
+
         Settings.health = 3;
 
         MapGenerator.start();

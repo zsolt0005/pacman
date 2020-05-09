@@ -19,9 +19,9 @@ public class Settings {
     public static boolean isPaused = false; // Game pause (Key: P)
     public static boolean isGameOver = false; // Game over (Win/Lose)
     public static boolean isStarted = false; // First launch
-    public static PacMan pacman = null; // PacMan cahracter
+    public static PacMan pacman = null; // PacMan character
     public static int ghostCount = 1; // Ghosts count
-    public static Ghost[] ghosts = new Ghost[ghostCount]; // PacMan cahracter
+    public static Ghost[] ghosts = new Ghost[ghostCount]; // PacMan character
     public static int health = 3; // Health
     public static int difficulty = 1; // 0 - random location | 1 - PathFinding
 
