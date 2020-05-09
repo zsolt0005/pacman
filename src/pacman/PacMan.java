@@ -188,6 +188,9 @@ public class PacMan extends Canvas {
                 powerUpTimeLeft = Settings.powerUpTime; // Set PowerUp
                 Settings.groupGame.getChildren().remove(MapGenerator.mapElements[myY][myX]); // Remove from view
                 MapGenerator.mapElements[myY][myX] = MapGenerator.generateMapElement(myX, myY); // Replace
+                for(int i = 0; i < Settings.ghosts.length; i++){
+                    Settings.ghosts[i].path.clear();
+                }
             }
         }
 

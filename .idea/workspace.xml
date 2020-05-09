@@ -8,10 +8,24 @@
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PacMan/pacman/Ghost.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PacMan/pacman/Ghost.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PacMan/pacman/MapGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PacMan/pacman/MapGenerator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/PacMan/pacman/Settings.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/PacMan/pacman/Settings.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PacMan/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PacMan/pacman/AStar/Pathfinding.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PacMan/pacman/AStar/Walkable.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PacMan/pacman/Developer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PacMan/pacman/Ghost.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PacMan/pacman/GuiHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PacMan/pacman/MapGenerator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PacMan/pacman/PacMan.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PacMan/pacman/SaveHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PacMan/pacman/Settings.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PacMan/pacman/Setup.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PacMan/sample/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/PacMan/sample/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/saves/high.txt" beforeDir="false" afterPath="$PROJECT_DIR$/saves/high.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pacman/AStar/Walkable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pacman/AStar/Walkable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pacman/Ghost.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pacman/Ghost.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pacman/MapGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pacman/MapGenerator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pacman/PacMan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pacman/PacMan.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pacman/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pacman/Settings.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pacman/Setup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pacman/Setup.java" afterDir="false" />
@@ -104,7 +118,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="dynamic.classpath" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Game" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
@@ -141,7 +155,7 @@
     <configuration name="Main" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="sample.Main" />
       <module name="PacMan" />
-      <option name="VM_PARAMETERS" value="--module-path ${FX} --add-modules javafx.controls,javafx.fxml,javafx.media" />
+      <option name="VM_PARAMETERS" value="--module-path ${PATH_TO_FX} --add-modules javafx.controls,javafx.fxml,javafx.media" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="sample.*" />
@@ -221,7 +235,16 @@
       <workItem from="1587467053989" duration="9331000" />
       <workItem from="1587557564949" duration="13669000" />
       <workItem from="1587630115622" duration="316000" />
-      <workItem from="1587630845303" duration="15241000" />
+      <workItem from="1587630845303" duration="15297000" />
+      <workItem from="1587743649154" duration="3605000" />
+      <workItem from="1587795145305" duration="12968000" />
+      <workItem from="1587826578130" duration="940000" />
+      <workItem from="1587885193265" duration="16000" />
+      <workItem from="1588242178978" duration="6726000" />
+      <workItem from="1588328474293" duration="12000" />
+      <workItem from="1588356053236" duration="141000" />
+      <workItem from="1589027209769" duration="3000" />
+      <workItem from="1589037949037" duration="8522000" />
     </task>
     <servers />
   </component>
@@ -237,10 +260,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="452" y="97" key="#Console/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1586524014725" />
-    <state x="414" y="169" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1587630126808">
+    <state x="414" y="169" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588356060183">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="414" y="169" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1587630126808" />
+    <state x="414" y="169" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1588356060183" />
     <state x="721" y="151" key="#com.intellij.ide.util.MemberChooser" timestamp="1587488278938">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -253,30 +276,30 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="627" y="219" key="#com.intellij.util.ui.classpath.ChooseLibrariesDialog/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1587574814042" />
-    <state x="502" y="204" key="FileChooserDialogImpl" timestamp="1587630133640">
+    <state x="502" y="204" key="FileChooserDialogImpl" timestamp="1588328484132">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="502" y="204" key="FileChooserDialogImpl/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1587630133640" />
-    <state width="1869" height="269" key="GridCell.Tab.0.bottom" timestamp="1587665095324">
+    <state x="502" y="204" key="FileChooserDialogImpl/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1588328484132" />
+    <state width="1869" height="269" key="GridCell.Tab.0.bottom" timestamp="1589048442375">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1869" height="269" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1360.156.1360.728@0.0.1920.1040" timestamp="1586635846664" />
-    <state width="1869" height="269" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1587665095324" />
-    <state width="1869" height="269" key="GridCell.Tab.0.center" timestamp="1587665095324">
+    <state width="1869" height="269" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1589048442375" />
+    <state width="1869" height="269" key="GridCell.Tab.0.center" timestamp="1589048442375">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1869" height="269" key="GridCell.Tab.0.center/0.0.1920.1040/-1360.156.1360.728@0.0.1920.1040" timestamp="1586635846664" />
-    <state width="1869" height="269" key="GridCell.Tab.0.center/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1587665095324" />
-    <state width="1869" height="269" key="GridCell.Tab.0.left" timestamp="1587665095324">
+    <state width="1869" height="269" key="GridCell.Tab.0.center/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1589048442375" />
+    <state width="1869" height="269" key="GridCell.Tab.0.left" timestamp="1589048442375">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1869" height="269" key="GridCell.Tab.0.left/0.0.1920.1040/-1360.156.1360.728@0.0.1920.1040" timestamp="1586635846664" />
-    <state width="1869" height="269" key="GridCell.Tab.0.left/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1587665095324" />
-    <state width="1869" height="269" key="GridCell.Tab.0.right" timestamp="1587665095324">
+    <state width="1869" height="269" key="GridCell.Tab.0.left/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1589048442375" />
+    <state width="1869" height="269" key="GridCell.Tab.0.right" timestamp="1589048442375">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1869" height="269" key="GridCell.Tab.0.right/0.0.1920.1040/-1360.156.1360.728@0.0.1920.1040" timestamp="1586635846664" />
-    <state width="1869" height="269" key="GridCell.Tab.0.right/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1587665095324" />
+    <state width="1869" height="269" key="GridCell.Tab.0.right/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1589048442375" />
     <state width="1869" height="335" key="GridCell.Tab.1.bottom" timestamp="1586805050246">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -297,23 +320,23 @@
     </state>
     <state width="1869" height="335" key="GridCell.Tab.1.right/0.0.1920.1040/-1360.156.1360.728@0.0.1920.1040" timestamp="1586635580341" />
     <state width="1869" height="335" key="GridCell.Tab.1.right/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1586805050246" />
-    <state x="233" y="0" width="1296" height="1022" key="SettingsEditor" timestamp="1587574965252">
+    <state x="233" y="0" width="1296" height="1022" key="SettingsEditor" timestamp="1589048503851">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="233" y="0" width="1296" height="1022" key="SettingsEditor/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1587574965252" />
+    <state x="233" y="0" width="1296" height="1022" key="SettingsEditor/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1589048503851" />
     <state x="749" y="362" key="classpath-attribute-editor" timestamp="1587484024191">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="749" y="362" key="classpath-attribute-editor/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1587484024191" />
-    <state x="548" y="304" key="com.intellij.ide.util.TipDialog" timestamp="1587630121022">
+    <state x="548" y="304" key="com.intellij.ide.util.TipDialog" timestamp="1589037957052">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="548" y="304" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-1360.156.1360.728@0.0.1920.1040" timestamp="1586634333835" />
-    <state x="548" y="304" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1587630121022" />
-    <state x="6" y="199" key="new project wizard" timestamp="1586018546414">
+    <state x="548" y="304" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1589037957052" />
+    <state x="6" y="199" key="new project wizard" timestamp="1588356190007">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="6" y="199" key="new project wizard/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1586018546414" />
+    <state x="6" y="199" key="new project wizard/0.0.1920.1040/-1360.182.1360.728@0.0.1920.1040" timestamp="1588356190007" />
     <state x="532" y="237" key="run.anything.popup" timestamp="1587571831544">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

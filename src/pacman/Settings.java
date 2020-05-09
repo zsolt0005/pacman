@@ -20,10 +20,10 @@ public class Settings {
     public static boolean isGameOver = false; // Game over (Win/Lose)
     public static boolean isStarted = false; // First launch
     public static PacMan pacman = null; // PacMan cahracter
-    public static int ghostCount = 4; // Ghosts count
+    public static int ghostCount = 1; // Ghosts count
     public static Ghost[] ghosts = new Ghost[ghostCount]; // PacMan cahracter
-    public static int health = 1; // Health
-    public static int difficulty = 2; // 0 - random location | 1 - PathFinding | 2 - PathFinding with WallHack
+    public static int health = 3; // Health
+    public static int difficulty = 1; // 0 - random location | 1 - PathFinding
 
     // Game
     public static int pintForPoint = 10; // How many points you get after point collision
@@ -105,6 +105,12 @@ public class Settings {
                 new Image("file:img/Ghost/Alive/ghost-yellow-02.png"),
                 new Image("file:img/Ghost/Alive/ghost-yellow-03.png"),
                 new Image("file:img/Ghost/Alive/ghost-yellow-04.png")
+        });
+        ghostsImg.add(new Image[]{
+                new Image("file:img/Ghost/Scared/ghost-scared-01.png"),
+                new Image("file:img/Ghost/Scared/ghost-scared-02.png"),
+                new Image("file:img/Ghost/Scared/ghost-scared-03.png"),
+                new Image("file:img/Ghost/Scared/ghost-scared-04.png")
         });
         ghostsImg.add(new Image[]{
                 new Image("file:img/Ghost/Dead/ghost-dead-01.png"),

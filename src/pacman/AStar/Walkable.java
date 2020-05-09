@@ -34,7 +34,7 @@ public class Walkable extends Button {
         for(int y = -1; y <= 1; y++)
             for(int x = -1; x <= 1; x++){
                 if( (y == 0 && x == 0) || (y == 1 && x == 1) || (y == 1 && x == -1) || (y == -1 && x == 1) || (y == -1 && x == -1) )
-                    continue; // If x=0 & y=0 skip because its this node
+                    continue; // If x=0 & y=0 skip because its this node or in corners
 
                 // Check if inside the map
                 int checkX = (int)position.getX() + x;

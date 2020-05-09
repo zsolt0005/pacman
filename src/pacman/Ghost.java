@@ -26,6 +26,8 @@ public class Ghost extends Canvas {
     int direction = 1; // 0-UP 1-RIGHT 2-DOWN 3-LEFT
     int requestedDirection = 1; // For direction change
 
+    double speed = Settings.speed;
+
     boolean isDead = false; // alive/dead state
     boolean haveDeadPath = false;
     boolean isMoving = false; // moving state
@@ -33,11 +35,13 @@ public class Ghost extends Canvas {
     // PathFinding
     List<Walkable> path = new ArrayList<>();
     int beforeCenter = 200;
+    Walkable startNode;
+    Walkable endNode;
+    double percent = 0;
 
     // For animation
     int animationFrame = 0;
     List<Image[]> ghosts = new ArrayList<>();
-
 
     public Ghost(){
         super(Settings.tileSize * 0.7, Settings.tileSize * 0.7);
@@ -49,6 +53,7 @@ public class Ghost extends Canvas {
             // Random color
         int rnd = ThreadLocalRandom.current().nextInt(0, 4);
         ghosts.add(Settings.ghostsImg.get(rnd)); // Ghost
+        ghosts.add(Settings.ghostsImg.get(Settings.ghostsImg.size()-2)); // Scared animation
         ghosts.add(Settings.ghostsImg.get(Settings.ghostsImg.size()-1)); // Dead animation
 
         // </editor-fold>
@@ -81,6 +86,25 @@ public class Ghost extends Canvas {
         if(Settings.difficulty == 0 && !Settings.devBuild){
 
             t3 = new Timeline(new KeyFrame(Duration.millis(100),e->{
+
+                if(isDead && !haveDeadPath){
+                    if(speed != Settings.speed)
+                        speed = Settings.speed;
+
+                    path.clear();
+                    // If dead, go back to spawn location
+                    // Get ghost and spawn position
+                    Walkable startNode = (Walkable) MapGenerator.mapElements[ ( (int)(position.getY()) ) ][( (int)(position.getX()) )];
+                    Walkable endNode = (Walkable) MapGenerator.mapElements[11][15];
+
+                    Pathfinding p = new Pathfinding(startNode, endNode);
+
+                    path = p.foundPath;
+
+                    haveDeadPath = true;
+                    return;
+                }
+
                 if(direction != requestedDirection)
                     return;
 
@@ -98,21 +122,82 @@ public class Ghost extends Canvas {
             t3.setCycleCount(Animation.INDEFINITE);
             t3.play();
 
-        }else if(Settings.difficulty == 2 && !Settings.devBuild){
-            // Hard difficulty, WallHack for every ghost (in range (13) focus player)
-            t3 = new Timeline(new KeyFrame(Duration.millis(1000),e->{
-                if(Settings.isPaused || isDead)
+        }else if(Settings.difficulty == 1 && !Settings.devBuild){
+            // Difficulty 1
+            t3 = new Timeline(new KeyFrame(Duration.millis(500),e->{
+                if(Settings.isPaused || isDead || Settings.devBuild)
                     return;
 
-                path.clear();
-                // Get ghost and PacMan position
-                Walkable startNode = (Walkable) MapGenerator.mapElements[ ( (int)(position.getY()) ) ][( (int)(position.getX()) )];
-                Walkable endNode = (Walkable) MapGenerator.mapElements[(int)(Settings.pacman.getLayoutY() / Settings.tileSize)][(int)(Settings.pacman.getLayoutX() / Settings.tileSize)];
+                if(!Settings.pacman.hasPowerUp){
+
+                    if(percent > 20 && percent <= 50)
+                        checkForPlayer(1);
+
+                    if(percent > 50 && percent <= 90)
+                        checkForPlayer(2);
+
+                    if(percent > 90)
+                        checkForPlayer(3);
+
+                    return;
+                }
+
+                if(speed == Settings.speed)
+                    speed = speed / 2;
+
+                if(path.size() > 0)
+                    return;
+
+                // Random pick position
+                int minX = (int)position.getX();
+                int minY = (int)position.getY();
+                int multiplierX = 0;
+                int multiplierY = 0;
+                int wantX = 0;
+                int wantY = 0;
+
+                // Get min
+
+                if(getLayoutX() < Settings.pacman.getLayoutX())
+                    multiplierX = -1;
+                else
+                    multiplierX = 1;
+
+                if(getLayoutY() < Settings.pacman.getLayoutY())
+                    multiplierY = -1;
+                else
+                    multiplierY = 1;
+
+                int iterations = 0;
+                while( !(MapGenerator.mapElements[wantY][wantX] instanceof Walkable)){
+                    iterations++;
+                    if(multiplierY > 0){
+                        wantY = ThreadLocalRandom.current().nextInt(minY, MapGenerator.mapElements.length - 1);
+                    }
+                    else{
+                        wantY = ThreadLocalRandom.current().nextInt(0, minY);
+                    }
+
+                    if(multiplierX > 0)
+                        wantX = ThreadLocalRandom.current().nextInt(minX, MapGenerator.mapElements[0].length - 1);
+                    else
+                        wantX = ThreadLocalRandom.current().nextInt(0, minX);
+
+                    if(iterations > MapGenerator.mapElements.length * 2){
+                        wantX = 1;
+                        wantY = 1;
+                    }
+                }
+
+                if(endNode != null)
+                    if(endNode.realPosition.getX() == wantX && endNode.realPosition.getY() == wantY)
+                        return;
+
+                startNode = (Walkable) MapGenerator.mapElements[ ( (int)Math.round(position.getY()) ) ][( (int)Math.round(position.getX()) )];
+                endNode = (Walkable) MapGenerator.mapElements[wantY][wantX];
 
                 Pathfinding p = new Pathfinding(startNode, endNode);
-
                 path = p.foundPath;
-
 
             }));
             t3.setCycleCount(Animation.INDEFINITE);
@@ -127,9 +212,107 @@ public class Ghost extends Canvas {
     }
 
     void movement(){
-        position = new Point2D( (int)(getLayoutX() / Settings.tileSize ), (int)(getLayoutY() / Settings.tileSize) );
+        position = new Point2D( (int)Math.round(getLayoutX() / Settings.tileSize ), (int)Math.round(getLayoutY() / Settings.tileSize) );
         double x = 0;
         double y = 0;
+
+        // Follow path
+        if( (Settings.difficulty != 0 && path.size() > 0) || (isDead && haveDeadPath && path.size() > 0) ){
+            System.out.println("Following path");
+            x = 0;
+            y = 0;
+            // Get path, position and distance
+            double pathX = path.get(0).realPosition.getX() + ((Settings.tileSize - getWidth()) / 2);
+            double pathY = path.get(0).realPosition.getY()+ ((Settings.tileSize - getHeight()) / 2);
+            double myX = (double) Math.round(getLayoutX() * 100) / 100;
+            double myY = (double) Math.round(getLayoutY() * 100) / 100;
+            double distX = (double) Math.round((pathX - myX) * 100) / 100;
+            double distY = (double) Math.round((pathY - myY) * 100) / 100;
+
+            // Set speed
+            if(distX > 0){
+                x = speed;
+                requestedDirection = 1;
+            }
+            if(distX < 0){
+                x = -speed;
+                requestedDirection = 3;
+            }
+            if(distY > 0){
+                y = speed;
+                requestedDirection = 2;
+            }
+            if(distY < 0){
+                y = -speed;
+                requestedDirection = 0;
+            }
+
+            // If cant move, center the closest point (x or y)
+            if(x != 0 && y != 0){
+                beforeCenter--;
+                if(beforeCenter <= 0){
+                    if(Math.abs(distX) > Math.abs(distY) ){
+                        y = 0;
+                        setLayoutY(( (int)(getLayoutY() / Settings.tileSize) * Settings.tileSize ) + ((Settings.tileSize - getHeight()) / 2));
+                    }
+                    else{
+                        x = 0;
+                        setLayoutX(( (int)(getLayoutX() / Settings.tileSize) * Settings.tileSize ) + ((Settings.tileSize - getWidth()) / 2));
+                    }
+                    beforeCenter = 200;
+                }
+            }
+
+            System.out.println(x + " " + y);
+            // Move the ghost
+            if(collisionDetection(0)){
+                isMoving = true;
+                System.out.println("Moving....");
+                setLayoutX(getLayoutX() + x);
+                setLayoutY(getLayoutY() + y);
+            }else{
+                isMoving = false;
+                System.out.println("Not moving");
+                if(x != 0 || y != 0){
+                    // Prevent stuck while dead (I don't know why it happened but it removes this bug)
+                    setLayoutY(( (int)(getLayoutY() / Settings.tileSize) * Settings.tileSize ) + ((Settings.tileSize - getHeight()) / 2));
+                    setLayoutX(( (int)(getLayoutX() / Settings.tileSize) * Settings.tileSize ) + ((Settings.tileSize - getWidth()) / 2));
+                }
+            }
+
+            if(x == 0 && y == 0){
+                path.remove(0);
+                if(path.size() == 0)
+                    if(isDead){
+                        isDead = false;
+                        haveDeadPath = false;
+                    }
+            }
+        }
+
+        // If dead
+        if(isDead && !haveDeadPath){
+            if(speed != Settings.speed)
+                speed = Settings.speed;
+
+            path.clear();
+            // If dead, go back to spawn location
+            // Get ghost and spawn position
+            Walkable startNode = (Walkable) MapGenerator.mapElements[ ( (int)(position.getY()) ) ][( (int)(position.getX()) )];
+            Walkable endNode = (Walkable) MapGenerator.mapElements[11][15];
+
+            Pathfinding p = new Pathfinding(startNode, endNode);
+
+            path = p.foundPath;
+
+            haveDeadPath = true;
+        }
+
+        // Developer build
+        if(!isDead && Settings.devBuild && Developer.lastPath.size() > 0){
+            path.clear();
+            path.addAll(Developer.lastPath);
+        }
 
         // <editor-fold desc="Move (Difficulty 0)">
 
@@ -137,13 +320,13 @@ public class Ghost extends Canvas {
 
             // <editor-fold desc="Set speed">
             if(direction == 0)
-                y = -Settings.speed;
+                y = -speed;
             if(direction == 1)
-                x = Settings.speed;
+                x = speed;
             if(direction == 2)
-                y = Settings.speed;
+                y = speed;
             if(direction == 3)
-                x = -Settings.speed;
+                x = -speed;
 
             // </editor-fold>
 
@@ -157,111 +340,54 @@ public class Ghost extends Canvas {
 
         // </editor-fold>
 
-        // <editor-fold desc="Move (Difficulty 1 or 2)">
+        // <editor-fold desc="Move (Difficulty 1)">
 
         if(Settings.difficulty != 0){
 
-            // Follow path
-            if(path.size() > 0){
-                x = 0;
-                y = 0;
-                    // Get path, position and distance
-                double pathX = path.get(0).realPosition.getX() + ((Settings.tileSize - getWidth()) / 2);
-                double pathY = path.get(0).realPosition.getY()+ ((Settings.tileSize - getHeight()) / 2);
-                double myX = (double) Math.round(getLayoutX() * 100) / 100;
-                double myY = (double) Math.round(getLayoutY() * 100) / 100;
-                double distX = (double) Math.round((pathX - myX) * 100) / 100;
-                double distY = (double) Math.round((pathY - myY) * 100) / 100;
-
-                    // Set speed
-                if(distX > 0){
-                    x = Settings.speed;
-                    requestedDirection = 1;
-                }
-                if(distX < 0){
-                    x = -Settings.speed;
-                    requestedDirection = 3;
-                }
-                if(distY > 0){
-                    y = Settings.speed;
-                    requestedDirection = 2;
-                }
-                if(distY < 0){
-                    y = -Settings.speed;
-                    requestedDirection = 0;
-                }
-
-                    // If cant move, center the closest point (x or y)
-                if(x != 0 && y != 0){
-                    beforeCenter--;
-                    if(beforeCenter <= 0){
-                        if(Math.abs(distX) > Math.abs(distY) ){
-                            y = 0;
-                            setLayoutY(( (int)(getLayoutY() / Settings.tileSize) * Settings.tileSize ) + ((Settings.tileSize - getHeight()) / 2));
-                        }
-                        else{
-                            x = 0;
-                            setLayoutX(( (int)(getLayoutX() / Settings.tileSize) * Settings.tileSize ) + ((Settings.tileSize - getWidth()) / 2));
-                        }
-                        beforeCenter = 200;
-                    }
-                }
-
-                    // Move the ghost
-                if(collisionDetection(0)){
-                    isMoving = true;
-                    setLayoutX(getLayoutX() + x);
-                    setLayoutY(getLayoutY() + y);
-                }else{
-                    isMoving = false;
-                    if(x != 0 || y != 0){
-                        // Prevent stuck while dead (I don't know why it happened but it removes this bug)
-                        setLayoutY(( (int)(getLayoutY() / Settings.tileSize) * Settings.tileSize ) + ((Settings.tileSize - getHeight()) / 2));
-                        setLayoutX(( (int)(getLayoutX() / Settings.tileSize) * Settings.tileSize ) + ((Settings.tileSize - getWidth()) / 2));
-                    }
-                }
-
-                if(x == 0 && y == 0){
-                    path.remove(0);
-                    if(path.size() == 0)
-                        if(isDead){
-                            isDead = false;
-                            haveDeadPath = false;
-                        }
-                }
-            }
-
             // Get path
+            if(!isDead && Settings.difficulty == 1 && !Settings.pacman.hasPowerUp && !Settings.devBuild){
+                if(speed != Settings.speed)
+                    speed = Settings.speed;
 
-                // Developer build
-            if(!isDead && Settings.devBuild && Developer.lastPath.size() > 0){
-                path.clear();
-                path.addAll(Developer.lastPath);
-            }
-
-            //// Hard difficulty, WallHack for every ghost (inside the timer t3) \\\\
-
-            // TODO: here
-            if(Settings.difficulty == 1 && !Settings.devBuild && path.size() == 0){
                 // Pick location based how many % of all points player picked up
                 // 0-20% -> Only random location pick
                 // 21-50% -> If inline with player follow to the last seen point
-                // 51-80% -> If player in range (8 blocks), follow through walls
-                // 80 - 100% -> Follow like hard difficulty
-            }
+                // 51-90% -> If player in range (12 blocks), follow through walls | or inline
+                // 90 - 100% -> Follow with WallHack
 
-            if(isDead && !haveDeadPath){
-                path.clear();
-                // If dead, go back to spawn location
-                    // Get ghost and spawn position
-                Walkable startNode = (Walkable) MapGenerator.mapElements[ ( (int)(position.getY()) ) ][( (int)(position.getX()) )];
-                Walkable endNode = (Walkable) MapGenerator.mapElements[11][15];
+                // <editor-fold desc="get points picked up">
 
-                Pathfinding p = new Pathfinding(startNode, endNode);
+                // Get % (All points: 269)
+                percent = 0;
+                for(int _y = 0; _y < MapGenerator.mapElements.length; _y++)
+                    for(int _x = 0; _x < MapGenerator.mapElements[_y].length; _x++)
+                        if(MapGenerator.mapElements[_y][_x].getId().equals("point") || MapGenerator.mapElements[_y][_x].getId().equals("power")){
+                            percent = percent +  (100.0 / 269.0); // Percent of one point from all
+                        }
+                percent = 100 - percent; // To get % of points picked up
 
-                path = p.foundPath;
+                // </editor-fold>
 
-                haveDeadPath = true;
+                // <editor-fold desc="get path">
+
+                if(percent <= 90 && path.size() == 0){
+                    // Random pick position
+                    int wantX = 0;
+                    int wantY = 0;
+
+                    while( !(MapGenerator.mapElements[wantY][wantX] instanceof Walkable)){
+                        wantY = ThreadLocalRandom.current().nextInt(0, MapGenerator.mapElements.length - 1);
+                        wantX = ThreadLocalRandom.current().nextInt(0, MapGenerator.mapElements[0].length - 1);
+                    }
+
+                    startNode = (Walkable) MapGenerator.mapElements[ ( (int)Math.round(position.getY()) ) ][( (int)Math.round(position.getX()) )];
+                    endNode = (Walkable) MapGenerator.mapElements[wantY][wantX];
+
+                    Pathfinding p = new Pathfinding(startNode, endNode);
+                    path = p.foundPath;
+                }
+
+                // </editor-fold>
             }
 
         }
@@ -369,13 +495,13 @@ public class Ghost extends Canvas {
 
         if(type == 1){
             // Check collision with PacMan
-            if(Settings.pacman != null)
+            if(Settings.pacman != null && !isDead)
                 if(Settings.pacman.getBoundsInParent().intersects(getLayoutX(),getLayoutY(),getWidth(),getHeight()))
-                    if(Settings.pacman.hasPowerUp && !isDead){
+                    if(Settings.pacman.hasPowerUp){
                         isDead = true;
                         path.clear();
                     }
-                    else if(!isDead)
+                    else
                         Settings.pacman.isDead = true;
         }
 
@@ -391,7 +517,179 @@ public class Ghost extends Canvas {
 
     void draw(){
         gc.clearRect(0,0, getWidth(), getHeight()); // Clear canvas
-        gc.drawImage(ghosts.get( (isDead ? 1 : 0) )[animationFrame], 0, 0, getWidth(), getHeight()); // Draw PacMan
+        if(isDead)
+            gc.drawImage(ghosts.get(2)[animationFrame], 0, 0, getWidth(), getHeight()); // Draw PacMan
+        else
+            gc.drawImage(ghosts.get( (Settings.pacman.hasPowerUp ? 1 : 0) )[animationFrame], 0, 0, getWidth(), getHeight()); // Draw PacMan
+
+    }
+
+    void checkForPlayer(int precision){
+
+        boolean foundPath = false;
+
+        // 21-50% -> If inline with player follow to the last seen point
+        if(precision == 1 || precision == 2){
+
+            // Check all directions while not wall or player
+            // Filtrate direction based player position (If players position is lower than this objects, dont check anything higher)
+
+            if(getLayoutX() < Settings.pacman.getLayoutX()){
+                // Check right
+
+                int offset = 1; // 1 because 0 is the same spot as the ghosts position
+
+                while(true){
+
+                    if(position.getX() + offset > MapGenerator.mapElements[0].length)
+                        break;
+
+                    if(MapGenerator.mapElements[(int) position.getY()][(int) position.getX() + offset].getId().equals("wall"))
+                        break;
+
+                    if(MapGenerator.mapElements[(int)position.getY()][(int)position.getX() + offset].getBoundsInParent().intersects(
+                            Settings.pacman.getBoundsInParent()
+                    )){
+                        startNode = (Walkable) MapGenerator.mapElements[ ( (int)(position.getY()) ) ][( (int)(position.getX()) )];
+                        endNode = (Walkable) MapGenerator.mapElements[(int)position.getY()][(int)position.getX() + offset];
+
+                        Pathfinding p = new Pathfinding(startNode, endNode);
+                        path = p.foundPath;
+
+                        foundPath = true;
+
+                        break;
+                    }
+
+                    offset++;
+                }
+
+            }else{
+                // Check left
+
+                int offset = 1; // 1 because 0 is the same spot as the ghosts position
+
+                while(true){
+
+                    if(position.getX() - offset < 0)
+                        break;
+
+                    if(MapGenerator.mapElements[(int) position.getY()][(int) position.getX() - offset].getId().equals("wall"))
+                        break;
+
+                    if(MapGenerator.mapElements[(int)position.getY()][(int)position.getX() - offset].getBoundsInParent().intersects(
+                            Settings.pacman.getBoundsInParent()
+                    )){
+                        startNode = (Walkable) MapGenerator.mapElements[ ( (int)(position.getY()) ) ][( (int)(position.getX()) )];
+                        endNode = (Walkable) MapGenerator.mapElements[(int)position.getY()][(int)position.getX() - offset];
+
+                        Pathfinding p = new Pathfinding(startNode, endNode);
+                        path = p.foundPath;
+                        foundPath = true;
+                        break;
+                    }
+
+                    offset++;
+                }
+            }
+
+            if(getLayoutY() > Settings.pacman.getLayoutY() && !foundPath){
+                // Check UP
+
+                int offset = 1; // 1 because 0 is the same spot as the ghosts position
+
+                while(true){
+
+                    if(position.getY() - offset < 0 )
+                        break;
+
+                    if(MapGenerator.mapElements[(int) position.getY() - offset][(int) position.getX()].getId().equals("wall"))
+                        break;
+
+                    if(MapGenerator.mapElements[(int)position.getY() - offset][(int)position.getX()].getBoundsInParent().intersects(
+                            Settings.pacman.getBoundsInParent()
+                    )){
+                        startNode = (Walkable) MapGenerator.mapElements[ ( (int)(position.getY()) ) ][( (int)(position.getX()) )];
+                        endNode = (Walkable) MapGenerator.mapElements[(int)position.getY() - offset][(int)position.getX()];
+
+                        Pathfinding p = new Pathfinding(startNode, endNode);
+                        path = p.foundPath;
+
+                        break;
+                    }
+
+                    offset++;
+                }
+
+            }else{
+                // Check DOWN
+
+                int offset = 1; // 1 because 0 is the same spot as the ghosts position
+
+                while(true){
+
+                    if(position.getY() + offset > MapGenerator.mapElements.length)
+                        break;
+
+                    if(MapGenerator.mapElements[(int) position.getY() + offset][(int) position.getX()].getId().equals("wall"))
+                        break;
+
+                    if(MapGenerator.mapElements[(int)position.getY() + offset][(int)position.getX()].getBoundsInParent().intersects(
+                            Settings.pacman.getBoundsInParent()
+                    )){
+                        startNode = (Walkable) MapGenerator.mapElements[ ( (int)(position.getY()) ) ][( (int)(position.getX()) )];
+                        endNode = (Walkable) MapGenerator.mapElements[(int)position.getY() + offset][(int)position.getX()];
+
+                        Pathfinding p = new Pathfinding(startNode, endNode);
+                        path = p.foundPath;
+
+                        break;
+                    }
+
+                    offset++;
+                }
+            }
+        }
+
+        // 51-90% -> If player in range (12 blocks), follow through walls || or inline
+        if(precision == 2 && !foundPath){
+
+            for(int x = -6; x <= 6; x++){
+                for(int y = -6; y <= 6; y++){
+                    if(position.getX() + x > MapGenerator.mapElements[0].length - 1 || position.getX() + x < 0 ||
+                       position.getY() + y > MapGenerator.mapElements.length - 1 || position.getY() + y < 0)
+                        continue;
+
+                    if(x == 0 && y == 0)
+                        continue; // Dont check itself
+
+                    if(MapGenerator.mapElements[(int)position.getY() + y][(int)position.getX() + x].getBoundsInParent().intersects(
+                            Settings.pacman.getBoundsInParent()
+                    )){
+                        startNode = (Walkable) MapGenerator.mapElements[ ( (int)(position.getY()) ) ][( (int)(position.getX()) )];
+                        endNode = (Walkable) MapGenerator.mapElements[(int)position.getY() + y][(int)position.getX() + x];
+
+                        Pathfinding p = new Pathfinding(startNode, endNode);
+                        path = p.foundPath;
+
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        // Follow player everywhere
+        if(precision == 3){
+            path.clear();
+            startNode = (Walkable) MapGenerator.mapElements[ ( (int)(position.getY()) ) ][( (int)(position.getX()) )];
+            endNode = (Walkable) MapGenerator.mapElements[(int)Math.round(Settings.pacman.getLayoutY() / Settings.tileSize)][(int)Math.round(Settings.pacman.getLayoutX() / Settings.tileSize)];
+
+            Pathfinding p = new Pathfinding(startNode, endNode);
+            path = p.foundPath;
+        }
     }
 
 }
+
+// TODO: If dead and collides again, ghost stops moving

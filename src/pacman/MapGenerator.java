@@ -67,7 +67,7 @@ public class MapGenerator {
             // Apply map elements based on the blueprint
         for(int y = 0; y < mapY.length; y++){
             for(int x = 0; x < mapY[y].length(); x++){
-                Button b = new Button();;
+                Button b = new Button();
                     // Place wall
                 if(mapY[y].charAt(x) == 'x'){
                     b.setPrefWidth(Settings.tileSize);
