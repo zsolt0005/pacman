@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,40 +85,40 @@ public class Settings {
 
     public static void load(){
         ghostsImg.add(new Image[]{
-                new Image("file:img/Ghost/Alive/ghost-blue-01.png"),
-                new Image("file:img/Ghost/Alive/ghost-blue-02.png"),
-                new Image("file:img/Ghost/Alive/ghost-blue-03.png"),
-                new Image("file:img/Ghost/Alive/ghost-blue-04.png")
+                new Image(Paths.get("img/Ghost/Alive/ghost-blue-01.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Alive/ghost-blue-02.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Alive/ghost-blue-03.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Alive/ghost-blue-04.png").toUri().toString())
         });
         ghostsImg.add(new Image[]{
-                new Image("file:img/Ghost/Alive/ghost-green-01.png"),
-                new Image("file:img/Ghost/Alive/ghost-green-02.png"),
-                new Image("file:img/Ghost/Alive/ghost-green-03.png"),
-                new Image("file:img/Ghost/Alive/ghost-green-04.png")
+                new Image(Paths.get("img/Ghost/Alive/ghost-green-01.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Alive/ghost-green-02.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Alive/ghost-green-03.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Alive/ghost-green-04.png").toUri().toString())
         });
         ghostsImg.add(new Image[]{
-                new Image("file:img/Ghost/Alive/ghost-pink-01.png"),
-                new Image("file:img/Ghost/Alive/ghost-pink-02.png"),
-                new Image("file:img/Ghost/Alive/ghost-pink-03.png"),
-                new Image("file:img/Ghost/Alive/ghost-pink-04.png")
+                new Image(Paths.get("img/Ghost/Alive/ghost-pink-01.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Alive/ghost-pink-02.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Alive/ghost-pink-03.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Alive/ghost-pink-04.png").toUri().toString())
         });
         ghostsImg.add(new Image[]{
-                new Image("file:img/Ghost/Alive/ghost-yellow-01.png"),
-                new Image("file:img/Ghost/Alive/ghost-yellow-02.png"),
-                new Image("file:img/Ghost/Alive/ghost-yellow-03.png"),
-                new Image("file:img/Ghost/Alive/ghost-yellow-04.png")
+                new Image(Paths.get("img/Ghost/Alive/ghost-yellow-01.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Alive/ghost-yellow-02.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Alive/ghost-yellow-03.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Alive/ghost-yellow-04.png").toUri().toString())
         });
         ghostsImg.add(new Image[]{
-                new Image("file:img/Ghost/Scared/ghost-scared-01.png"),
-                new Image("file:img/Ghost/Scared/ghost-scared-02.png"),
-                new Image("file:img/Ghost/Scared/ghost-scared-03.png"),
-                new Image("file:img/Ghost/Scared/ghost-scared-04.png")
+                new Image(Paths.get("img/Ghost/Scared/ghost-scared-01.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Scared/ghost-scared-02.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Scared/ghost-scared-03.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Scared/ghost-scared-04.png").toUri().toString())
         });
         ghostsImg.add(new Image[]{
-                new Image("file:img/Ghost/Dead/ghost-dead-01.png"),
-                new Image("file:img/Ghost/Dead/ghost-dead-02.png"),
-                new Image("file:img/Ghost/Dead/ghost-dead-03.png"),
-                new Image("file:img/Ghost/Dead/ghost-dead-04.png")
+                new Image(Paths.get("img/Ghost/Dead/ghost-dead-01.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Dead/ghost-dead-02.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Dead/ghost-dead-03.png").toUri().toString()),
+                new Image(Paths.get("img/Ghost/Dead/ghost-dead-04.png").toUri().toString())
         });
     }
 }
